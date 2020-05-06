@@ -12,6 +12,10 @@ const User = Schema({
     required: true,
     validate: (lastName) => check(lastName).isEmpty(),
   },
+  imgProfile: {
+    type: String,
+    validate: (img) => check(img).isURL(),
+  },
   email: {
     type: String,
     required: true,

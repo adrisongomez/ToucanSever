@@ -30,12 +30,15 @@ const Trip = Schema({
       validate: (url) => check(url).isURL(),
     },
   ],
-  participant: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  participant: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    default: [],
+  },
   mainPlace: {
     type: String,
     required: true,
