@@ -4,7 +4,7 @@ const cors = require("cors");
 const path = require("path");
 
 //Route Declaration
-const UserRoute = require("./src/routes/user.route");
+const RootRoute = require("./src/routes/root.route");
 
 // Start appliccation
 const app = express();
@@ -25,4 +25,5 @@ app.get("/", (req, res) => {
   res.status(200).send("hola");
 });
 
-app.use("/api/user/", UserRoute);
+app.use("/api/", RootRoute);
+;
