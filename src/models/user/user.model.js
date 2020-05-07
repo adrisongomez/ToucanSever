@@ -18,9 +18,9 @@ const User = Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: true,
     validate: (email) => check(email).isEmail(),
-    unique: true,
   },
   createdAt: {
     type: Date,
