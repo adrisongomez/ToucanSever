@@ -1,7 +1,7 @@
 const express = require("express");
 const UserRoute = express.Router();
-const User = require("../models/user/user.model");
-const faker = require("faker");
+const User = require("../../models/user/user.model");
+const { createUser } = require("./user.utils");
 
 UserRoute.get("/", (req, res, next) => {
   User.find({})
@@ -16,34 +16,10 @@ UserRoute.get("/", (req, res, next) => {
     });
 });
 
-UserRoute.post("/", (req, res, next) => {
-  const user = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    country: req.body.country,
-    city: req.body.city,
-    state: req.body.state,
-    zipCode: req.body.zipCode,
-    address: req.body.address,
-  };
-  
-  const newUser = new User(user);
-  User.create(newUser)
-    .then(() => {
-      console.log("New User was created Successfully");
-      res
-        .status(201)
-        .json({ status: "1", message: "The User was created successfully" });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(504).json({ status: "0", message: "Something Happen" });
-      throw err;
-    });
-});
+UserRoute.post("/", createUser(User));
 
 UserRoute.get("/faker", (req, res, next) => {
+  console.log('esto se ejecuta')
   const fakeUser = Array.from(Array(10), () => {
     const newUser = new User({
       firstName: faker.name.firstName(),
