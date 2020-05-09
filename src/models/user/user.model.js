@@ -7,6 +7,7 @@ const User = Schema({
     required: true,
     validate: (firstName) => check(firstName).isEmpty(),
   },
+  
   lastName: {
     type: String,
     required: true,

@@ -1,10 +1,6 @@
 const faker = require("faker");
 
-const {
-  connect,
-  closeDatabase,
-  dropDatabase,
-} = require("../db.handlerForTest");
+const {connect, closeDatabase, dropDatabase,} = require("../../testHelpers/db.testHelper");
 const User = require("./user.model");
 
 const mockUserData = () => ({
