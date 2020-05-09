@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "test": "jest --watch --runInBand"
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "axios": "^0.19.2",
