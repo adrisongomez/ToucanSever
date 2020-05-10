@@ -1,5 +1,4 @@
 const RootRouter = require("express").Router();
-
 const UserRoute = require("./user.route");
 
 RootRouter.get("/test", (req, res, next) => {

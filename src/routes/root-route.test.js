@@ -1,4 +1,5 @@
 const axios = require("axios").default;
+const mongoose = require("mongoose");
 const RootRoute = require("./root.route");
 const endpoint = "http://localhost:8000/api";
 const { createTestApp, getRouter } = require("../testHelpers/app.testHelper");
@@ -9,10 +10,13 @@ let server = undefined;
 
 describe("RootRoute is working", () => {
   beforeAll(async () => {
-    server = app.listen(8000);
     app.use("/api", RootRoute);
-});
-  afterAll(() => server.close());
+    server = await app.listen(8000);
+  });
+  afterAll(async () => {
+    await mongoose.disconnect();
+    await server.close();
+  });
   test("Reach /test endpoint and return status ok (200)", () => {
     return axios
       .get(`${endpoint}/test`)

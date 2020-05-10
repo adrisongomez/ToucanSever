@@ -26,14 +26,14 @@ const mockUserData = () => ({
 
 describe("User helper test", () => {
   beforeAll(async () => {
-    server = app.listen(8000);
+    server = await app.listen(8000);
     await connect();
     app.use("/", UserRoute);
   });
 
   afterAll(async () => {
     await closeDatabase();
-    server.close();
+    await server.close();
   });
 
   afterEach(async () => await dropDatabase());
