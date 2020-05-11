@@ -4,6 +4,7 @@ const {
   findAllUserDocs,
   findUserDocsPagination,
   updateUserDoc,
+  deleteUserDoc,
 } = require("../../services/user/user.service");
 
 exports.createUser = (User) => (req, res, next) => {
@@ -63,6 +64,15 @@ exports.updateUser = (User) => (req, res, next) => {
       res.status(200).json(resp);
     })
     .catch((err) => next(err));
+};
+
+exports.deleteUser = (User) => (req, res, next) => {
+  const idUser = req.params.id || undefined;
+  if (idUser) {
+    deleteUserDoc(idUser, User)
+      .then((userDeleted) => res.status(200).json(userDeleted))
+      .catch((err) => next(err));
+  } else throw "Id User is undefined. please send idUser `/api/user/:idUser` ";
 };
 
 const getUserFromRequest = (req) => ({

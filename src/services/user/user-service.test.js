@@ -6,13 +6,14 @@ const {
   findAllUserDocs,
   findUserDocsPagination,
   updateUserDoc,
+  deleteUserDoc,
 } = require("./user.service");
 
 const mockModel = {
   create: (obj) => Promise.resolve(obj),
   findById: (id) => Promise.resolve({ _id: id }),
   find: () => Promise.resolve(Array.from(Array(5), () => ({ id: "1" }))),
-  findByIdAndDelete: () => {},
+  deleteOne: (obj) => Promise.resolve({ id: 0, message: "User deleted" }),
   updateOne: (objId, objChange) =>
     Promise.resolve({ n: 1, nModified: 1, ok: 1 }),
 };
@@ -76,5 +77,11 @@ describe("User services work", () => {
       expect(resp.data.lastName).toEqual("Smith");
     });
   });
-  it.todo("Should delete a User passing id user");
+  it("Should delete a User passing id user", () => {
+    const mockIdUser = "asdasdasdasqweq123";
+    return deleteUserDoc(mockIdUser, mockModel).then((resp) => {
+      expect(resp.message).toEqual("User deleted");
+    });
+  });
 });
+

@@ -8,7 +8,7 @@ const {
   closeDatabase,
   dropDatabase,
 } = require("../../testHelpers/db.testHelper");
-const UserRoute = require("../../routes/user.route");
+const UserRoute = require("./user.route");
 
 const app = createTestApp();
 let server;
@@ -117,5 +117,18 @@ describe("User helper test", () => {
         expect(userUpdate.lastName).toBe("Oregon");
       })
       .catch((err) => console.log(err));
+  });
+  test("Delete a user by Id User", () => {
+    const mockUser = mockUserData();
+    return axios
+      .post(endpoint, mockUser)
+      .then((resp) => {
+        const idUser = resp.data.user._id;
+        return axios.delete(`${endpoint}/${idUser}`);
+      })
+      .then((resp) => {
+        expect(resp.status).toBe(200);
+        expect(resp.data.message).toBe("User deleted");
+      })
   });
 });

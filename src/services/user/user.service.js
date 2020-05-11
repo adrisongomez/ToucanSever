@@ -25,6 +25,14 @@ exports.updateUserDoc = (userId, userData, UserModel) => {
   ).then((resp) => ({ ...resp, data: { _id: userId, ...userData } }));
 };
 
+exports.deleteUserDoc = (userId, UserModel) => {
+  return UserModel.deleteOne({ _id: userId })
+    .then(() => ({ id: 0, message: "User deleted" }))
+    .catch((err) => {
+      throw err;
+    });
+};
+
 const createPaginationObject = ({ page, limit }, results) => ({
   page,
   limit,
