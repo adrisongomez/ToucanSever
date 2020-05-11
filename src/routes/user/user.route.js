@@ -10,7 +10,7 @@ const {
 } = require("../../handlers/user/user.helper");
 
 UserRoute.get("/test", (req, res, next) => {
-  res.send("TEST");
+  res.send("TEST1");
 });
 
 UserRoute.get("/:id", findUserById(User));
