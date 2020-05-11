@@ -11,7 +11,6 @@ const {
 const UserRoute = require("./user.route");
 
 const app = createTestApp();
-let server;
 
 const mockUserData = () => ({
   firstName: faker.name.firstName(),
@@ -23,28 +22,29 @@ const mockUserData = () => ({
   zipCode: faker.address.zipCode(),
   address: faker.address.streetAddress(),
 });
+const server = app.listen(8000);
+
+beforeAll(async () => {
+  await connect();
+  app.use("/", UserRoute);
+});
+
+afterEach(async () => await dropDatabase());
+
+afterAll(async () => {
+  await closeDatabase();
+  server.close();
+});
 
 describe("User helper test", () => {
-  beforeAll(async () => {
-    server = await app.listen(8000);
-    await connect();
-    app.use("/", UserRoute);
+  it("Should say TEST", (done) => {
+    return axios.get(`${endpoint}/test`).then((resp) => {
+      expect(resp.data).toBe("TEST");
+      done();
+    });
   });
 
-  afterAll(async () => {
-    await closeDatabase();
-    await server.close();
-  });
-
-  afterEach(async () => await dropDatabase());
-
-  it("Should say TEST", () => {
-    return axios
-      .get(`${endpoint}/test`)
-      .then((resp) => expect(resp.data).toBe("TEST"));
-  });
-
-  test("Create a user", () => {
+  test("Create a user", (done) => {
     const mockUser = mockUserData();
     return axios.post(endpoint, mockUser).then((resp) => {
       const data = resp.data.user;
@@ -53,13 +53,13 @@ describe("User helper test", () => {
       expect(data.lastName).toBe(mockUser.lastName);
       expect(data.email).toBe(mockUser.email);
       expect(data.createdAt).toBeDefined();
+      done();
     });
   });
 
-  test("Find a user id", async () => {
+  test("Find a user id", async (done) => {
     const mockUser1 = mockUserData();
     const mockUser2 = mockUserData();
-
     const user1 = await axios
       .post(endpoint, mockUser1)
       .then((resp) => resp.data.user);
@@ -70,8 +70,10 @@ describe("User helper test", () => {
       .get(`${endpoint}/${user1._id}`)
       .then((resp) => resp.data);
     expect(allUser._id).toBe(user1._id);
+    done();
   });
-  test("Get a user list without sending pagination details", () => {
+
+  test("Get a user list without sending pagination details", (done) => {
     const listMockUser = Array.from(Array(5), () => mockUserData());
     const sendAllUser = (mockUser) =>
       axios.post(endpoint, mockUser).then((response) => response.data.user);
@@ -81,11 +83,12 @@ describe("User helper test", () => {
         const data = resp.data;
         expect(resp.status).toBe(200);
         expect(data.length).toBe(5);
+        done();
       });
   });
 
-  test("Get a user list with sending pagination opcions", () => {
-    const listMockUser = Array.from(Array(50), () => mockUserData());
+  test("Get a user list with sending pagination opcions", (done) => {
+    const listMockUser = Array.from(Array(50), (done) => mockUserData());
     const sendAllUser = (mockUser) =>
       axios.post(endpoint, mockUser).then((response) => response.data.user);
     return Promise.all(listMockUser.map(sendAllUser))
@@ -95,10 +98,11 @@ describe("User helper test", () => {
         expect(resp.status).toBe(200);
         expect(data.page).toBe(4);
         expect(data.results.length).toBe(10);
+        done();
       });
   });
 
-  test("Update a user data", () => {
+  test("Update a user data", (done) => {
     const mockUser = mockUserData();
     let idCreated;
     return axios
@@ -115,10 +119,10 @@ describe("User helper test", () => {
         expect(userUpdate._id).toBe(idCreated);
         expect(userUpdate.firstName).toBe("John");
         expect(userUpdate.lastName).toBe("Oregon");
-      })
-      .catch((err) => console.log(err));
+        done();
+      });
   });
-  test("Delete a user by Id User", () => {
+  test("Delete a user by Id User", (done) => {
     const mockUser = mockUserData();
     return axios
       .post(endpoint, mockUser)
@@ -129,6 +133,7 @@ describe("User helper test", () => {
       .then((resp) => {
         expect(resp.status).toBe(200);
         expect(resp.data.message).toBe("User deleted");
-      })
+        done();
+      });
   });
 });
