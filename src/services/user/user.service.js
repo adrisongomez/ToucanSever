@@ -1,5 +1,20 @@
 exports.createUserDoc = (UserData, UserModel) => {
-  return UserModel.create(UserData);
+  return UserModel.create(UserData).catch((err) => {
+    if (err.code) {
+      throw {
+        message: "Error creating an User",
+        errors: [{ message: "Email is used, please use another one" }],
+      };
+    }
+    const errors = err.errors;
+    const responseErros = Object.keys(errors).map((error) =>
+      _mapErrorsToMessage(errors[error])
+    );
+    throw {
+      message: "Error creating an User",
+      errors: responseErros,
+    };
+  });
 };
 
 exports.findUserDocById = (idUser, UserModel) => {
@@ -14,7 +29,7 @@ exports.findUserDocsPagination = ({ page, limit }, UserModel) => {
   return UserModel.find()
     .limit(limit)
     .skip(limit * page)
-    .then((results) => createPaginationObject({ page, limit }, results));
+    .then((results) => _createPaginationObject({ page, limit }, results));
 };
 
 exports.updateUserDoc = (userId, userData, UserModel) => {
@@ -33,7 +48,13 @@ exports.deleteUserDoc = (userId, UserModel) => {
     });
 };
 
-const createPaginationObject = ({ page, limit }, results) => ({
+const _mapErrorsToMessage = ({ message, value, reason }) => ({
+  message,
+  value,
+  reason,
+});
+
+const _createPaginationObject = ({ page, limit }, results) => ({
   page,
   limit,
   results,

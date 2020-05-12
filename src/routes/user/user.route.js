@@ -7,11 +7,7 @@ const {
   findUserById,
   updateUser,
   deleteUser
-} = require("../../handlers/user/user.helper");
-
-UserRoute.get("/test", (req, res, next) => {
-  res.send("TEST");
-});
+} = require("../../handlers/user/user.handler");
 
 UserRoute.get("/:id", findUserById(User));
 UserRoute.get("/", findUsers(User));

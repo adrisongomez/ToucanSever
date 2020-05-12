@@ -2,7 +2,10 @@ const faker = require("faker");
 const axios = require("axios").default;
 const endpoint = "http://localhost:8000";
 
-const { createTestApp } = require("../../testHelpers/app.testHelper");
+const {
+  createTestApp,
+  addGenericRoute,
+} = require("../../testHelpers/app.testHelper");
 const {
   connect,
   closeDatabase,
@@ -22,11 +25,12 @@ const mockUserData = () => ({
   zipCode: faker.address.zipCode(),
   address: faker.address.streetAddress(),
 });
+app.use("/", UserRoute);
+addGenericRoute(app);
 const server = app.listen(8000);
 
 beforeAll(async () => {
   await connect();
-  app.use("/", UserRoute);
 });
 
 afterEach(async () => await dropDatabase());
@@ -36,14 +40,7 @@ afterAll(async () => {
   server.close();
 });
 
-describe("User helper test", () => {
-  it("Should say TEST", (done) => {
-    return axios.get(`${endpoint}/test`).then((resp) => {
-      expect(resp.data).toBe("TEST");
-      done();
-    });
-  });
-
+describe("User routes are using correctly", () => {
   test("Create a user", (done) => {
     const mockUser = mockUserData();
     return axios.post(endpoint, mockUser).then((resp) => {
@@ -133,6 +130,31 @@ describe("User helper test", () => {
       .then((resp) => {
         expect(resp.status).toBe(200);
         expect(resp.data.message).toBe("User deleted");
+        done();
+      });
+  });
+});
+
+describe("Users routes are using incorrectly", () => {
+  test("Create a user", (done) => {
+    const mockUser = mockUserData();
+    mockUser.firstName = undefined;
+    mockUser.lastName = undefined;
+    return axios.post(endpoint, mockUser).catch((error) => {
+      expect(error.response.status).toBe(400);
+      done();
+    });
+  });
+  test("Create a two user with the same email address", (done) => {
+    const mockUser1 = mockUserData();
+    const mockUser2 = mockUserData();
+    mockUser1.email = mockUser2.email;
+    return axios
+      .post(endpoint, mockUser1)
+      .then(() => axios.post(endpoint, mockUser2))
+      .catch(({ response }) => {
+        expect(response.status).toBe(400);
+        expect(response.data.errors.length).toBe(1);
         done();
       });
   });

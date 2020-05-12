@@ -1,25 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const port = 8000;
-let server;
+const {
+  errorRouteHandler,
+  unkwonRouteGenericHandler,
+} = require("../handlers/error/error.handler");
+const app = express();
 
 exports.createTestApp = () => {
-  const app = express();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cors());
   return app;
 };
 
-exports.listenApp = (app) => {
-  if (server !== undefined) {
-    const server = app.listen(port, () => {
-      console.log("Test Express App Running");
-    });
-  }
+exports.addGenericRoute = (app) => {
+  app.use(unkwonRouteGenericHandler());
+  app.use(errorRouteHandler());
 };
 
 exports.getRouter = () => express.Router();
-
-exports.closeServer = () => express.closeServer;

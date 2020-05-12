@@ -18,9 +18,7 @@ exports.createUser = (User) => (req, res, next) => {
       });
     })
     .catch((err) => {
-      // console.error(err);
-      res.status(500).json({ status: "0", message: "Something Happen" });
-      // throw err;
+      next(err);
     });
 };
 
@@ -31,7 +29,7 @@ exports.findUserById = (User) => (req, res, next) => {
       res.status(200).json(resp).end();
     })
     .catch((err) => {
-      next(err);
+      next(err)
     });
 };
 
@@ -67,12 +65,17 @@ exports.updateUser = (User) => (req, res, next) => {
 };
 
 exports.deleteUser = (User) => (req, res, next) => {
-  const idUser = req.params.id || undefined;
-  if (idUser) {
-    deleteUserDoc(idUser, User)
-      .then((userDeleted) => res.status(200).json(userDeleted))
-      .catch((err) => next(err));
-  } else throw "Id User is undefined. please send idUser `/api/user/:idUser` ";
+  try {
+    const idUser = req.params.id || undefined;
+    if (idUser) {
+      deleteUserDoc(idUser, User)
+        .then((userDeleted) => res.status(200).json(userDeleted))
+        .catch((err) => next(err));
+    } else
+      throw "Id User is undefined. please send idUser `/api/user/:idUser` ";
+  } catch (err) {
+    next(err);
+  }
 };
 
 const getUserFromRequest = (req) => ({

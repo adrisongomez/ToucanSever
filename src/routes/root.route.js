@@ -1,5 +1,9 @@
 const RootRouter = require("express").Router();
 const UserRoute = require("./user/user.route");
+const {
+  errorRouteHandler,
+  unkwonRouteGenericHandler,
+} = require("../handlers/error/error.handler");
 
 RootRouter.get("/test", (req, res, next) => {
   res.status(200).send("testing");
@@ -7,13 +11,7 @@ RootRouter.get("/test", (req, res, next) => {
 
 RootRouter.use("/user/", UserRoute);
 
-RootRouter.use((req, res, next) => {
-  res
-    .status(404)
-    .send({
-      error: 404,
-      message: "You cannot reach this route",
-    })
-    .end();
-});
+RootRouter.use(unkwonRouteGenericHandler());
+RootRouter.use(errorRouteHandler());
+
 module.exports = RootRouter;
