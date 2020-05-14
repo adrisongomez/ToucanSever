@@ -54,7 +54,7 @@ describe("User routes are using correctly", () => {
     });
   });
 
-  test.skip("Find a user id", async (done) => {
+  test("Find a user id", async (done) => {
     const mockUser1 = mockUserData();
     const mockUser2 = mockUserData();
     const user1 = await axios
@@ -70,7 +70,7 @@ describe("User routes are using correctly", () => {
     done();
   });
 
-  test.skip("Get a user list without sending pagination details", (done) => {
+  test("Get a user list without sending pagination details", (done) => {
     const listMockUser = Array.from(Array(5), () => mockUserData());
     const sendAllUser = (mockUser) =>
       axios.post(endpoint, mockUser).then((response) => response.data.user);
@@ -84,7 +84,7 @@ describe("User routes are using correctly", () => {
       });
   });
 
-  test.skip("Get a user list with sending pagination opcions", (done) => {
+  test("Get a user list with sending pagination opcions", (done) => {
     const listMockUser = Array.from(Array(50), (done) => mockUserData());
     const sendAllUser = (mockUser) =>
       axios.post(endpoint, mockUser).then((response) => response.data.user);
@@ -176,7 +176,7 @@ describe("Users routes are using incorrectly", () => {
 
   test("Find a user that doesn't exit", (done) => {
     return axios.get(`${endpoint}/123456789`).catch((err) => {
-      // console.log(err.response.data);
+      expect(err.response.status).toBe(404);
       done();
     });
   });

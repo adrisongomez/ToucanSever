@@ -117,7 +117,7 @@ describe("When user services are not using correctly", () => {
       done();
     });
   });
-  test.skip("Find a user with id that not exists", (done) => {
+  test("Find a user with id that not exists", (done) => {
     const mockModel = {
       findById: (id) =>
         Promise.reject({
@@ -140,7 +140,7 @@ describe("When user services are not using correctly", () => {
     });
   });
 
-  test.skip("Deleting a user that don't exits", (done) => {
+  test("Deleting a user that don't exits", (done) => {
     const mockModel = {
       deleteOne: (obj) => Promise.reject(obj),
     };

@@ -28,7 +28,7 @@ describe("User model test", () => {
     );
   });
 
-  it.skip("Should delete a User", () => {
+  it("Should delete a User", () => {
     const newUser = new User(mockUserData());
     return User.create(newUser)
       .then((resp) => User.findByIdAndDelete(resp._id))
@@ -36,7 +36,7 @@ describe("User model test", () => {
       .then((resp) => expect(resp).toEqual([]));
   });
 
-  it.skip("Should find a User", async () => {
+  it("Should find a User", async () => {
     const newUser = new User(mockUserData());
     await User.deleteMany();
     let saveUser = await User.create(newUser);
@@ -45,7 +45,7 @@ describe("User model test", () => {
     expect(findedUser.id).toBe(saveUser.id);
   });
 
-  it.skip("Should find many User", () => {
+  it("Should find many User", () => {
     const user1 = new User(mockUserData());
     const user2 = new User(mockUserData());
     return User.create(user1)
