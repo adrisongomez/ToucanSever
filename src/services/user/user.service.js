@@ -20,14 +20,13 @@ exports.findUserDocsPagination = ({ page, limit }, UserModel) => {
   return UserModel.find()
     .limit(limit)
     .skip(limit * page)
-    .then((results) => _createPaginationObject({ page, limit }, results));
+    .then((results) => _createPaginationObject({ page, limit }, results))
 };
 
 exports.updateUserDoc = (userId, userData, UserModel) => {
   return UserModel.updateOne(
     { _id: userId },
-    userData,
-    UserModel
+    userData
   ).then((resp) => ({ ...resp, data: { _id: userId, ...userData } }));
 };
 

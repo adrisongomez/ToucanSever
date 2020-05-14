@@ -1,18 +1,10 @@
-const faker = require("faker");
-
-const {connect, closeDatabase, dropDatabase,} = require("../../testHelpers/db.testHelper");
+const {
+  connect,
+  closeDatabase,
+  dropDatabase,
+} = require("../../testHelpers/db.testHelper");
 const User = require("./user.model");
-
-const mockUserData = () => ({
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.exampleEmail(),
-  country: faker.address.country(),
-  city: faker.address.city(),
-  state: faker.address.state(),
-  zipCode: faker.address.zipCode(),
-  address: faker.address.streetAddress(),
-});
+const { mockUserData } = require("../../testHelpers/utils.testHelper");
 
 describe("User model test", () => {
   beforeAll(() => connect());

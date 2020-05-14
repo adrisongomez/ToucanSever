@@ -7,7 +7,6 @@ const {
   deleteUserDocById,
 } = require("../../services/user/user.service");
 
-
 exports.createUser = (User) => (req, res, next) => {
   const userData = getUserFromRequest(req);
   createUserDoc(userData, User)
@@ -46,12 +45,13 @@ exports.findUsers = (User) => (req, res, next) => {
         res.status(200).json(userPaginated);
       })
       .catch((err) => next(err));
+  } else {
+    findAllUserDocs(User)
+      .then((allUser) => {
+        res.status(200).json(allUser);
+      })
+      .catch((err) => next(err));
   }
-  findAllUserDocs(User)
-    .then((allUser) => {
-      res.status(200).json(allUser);
-    })
-    .catch((err) => next(err));
 };
 
 exports.updateUser = (User) => (req, res, next) => {
