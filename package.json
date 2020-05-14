@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
+    "sandbox": "nodemon sandbox_code.js",
     "test": "jest --runInBand --detectOpenHandles"
   },
   "dependencies": {
@@ -20,7 +21,8 @@
     "express": "^4.17.1",
     "express-validator": "^6.4.1",
     "faker": "^4.1.0",
-    "mongoose": "^5.9.11"
+    "mongoose": "^5.9.11",
+    "mongoose-error-handler": "^1.1.0"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",

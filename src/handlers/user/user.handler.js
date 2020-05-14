@@ -4,8 +4,9 @@ const {
   findAllUserDocs,
   findUserDocsPagination,
   updateUserDoc,
-  deleteUserDoc,
+  deleteUserDocById,
 } = require("../../services/user/user.service");
+
 
 exports.createUser = (User) => (req, res, next) => {
   const userData = getUserFromRequest(req);
@@ -26,10 +27,10 @@ exports.findUserById = (User) => (req, res, next) => {
   const idUser = req.params.id;
   findUserDocById(idUser, User)
     .then((resp) => {
-      res.status(200).json(resp).end();
+      res.status(200).json(resp);
     })
     .catch((err) => {
-      next(err)
+      next(err);
     });
 };
 
@@ -42,13 +43,13 @@ exports.findUsers = (User) => (req, res, next) => {
   if (paginationOptions) {
     findUserDocsPagination(paginationOptions, User)
       .then((userPaginated) => {
-        res.status(200).json(userPaginated).end();
+        res.status(200).json(userPaginated);
       })
       .catch((err) => next(err));
   }
   findAllUserDocs(User)
     .then((allUser) => {
-      res.status(200).json(allUser).end();
+      res.status(200).json(allUser);
     })
     .catch((err) => next(err));
 };
@@ -68,7 +69,7 @@ exports.deleteUser = (User) => (req, res, next) => {
   try {
     const idUser = req.params.id || undefined;
     if (idUser) {
-      deleteUserDoc(idUser, User)
+      deleteUserDocById(idUser, User)
         .then((userDeleted) => res.status(200).json(userDeleted))
         .catch((err) => next(err));
     } else

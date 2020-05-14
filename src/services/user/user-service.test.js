@@ -6,7 +6,7 @@ const {
   findAllUserDocs,
   findUserDocsPagination,
   updateUserDoc,
-  deleteUserDoc,
+  deleteUserDocById,
 } = require("./user.service");
 
 const mockModel = {
@@ -89,7 +89,7 @@ describe("User services work", () => {
 
   it("Should delete a User passing id user", () => {
     const mockIdUser = "asdasdasdasqweq123";
-    return deleteUserDoc(mockIdUser, mockModel).then((resp) => {
+    return deleteUserDocById(mockIdUser, mockModel).then((resp) => {
       expect(resp.message).toEqual("User deleted");
     });
   });
@@ -97,27 +97,59 @@ describe("User services work", () => {
 
 describe("When user services are not using correctly", () => {
   test("Creating User with some field undefined or not setting", (done) => {
+    const error = {
+      errors: {
+        email: {
+          message: "Email must be unique and is required",
+          value: undefined,
+          reason: undefined,
+        },
+      },
+    };
     const mockModel = {
-      create: () =>
-        Promise.reject({
-          errors: {
-            email: {
-              message: "Email must be unique and is required",
-              value: undefined,
-              reason: undefined,
-            },
-          },
-        }),
+      create: () => Promise.reject(error),
     };
     const mockUser = mockUserData();
     mockUser.email = undefined;
 
-    createUserDoc(mockUser, mockModel).catch((err) => {
-      expect(err.message).toBe("Error creating an User");
-      expect(err.errors.length).toBe(1);
+    createUserDoc(mockUser, mockModel).catch(( err ) => {
+      expect(err).toBe(error);
       done();
     });
   });
-  test.todo("")
-});
+  test.skip("Find a user with id that not exists", (done) => {
+    const mockModel = {
+      findById: (id) =>
+        Promise.reject({
+          message:
+            'Cast to ObjectId failed for value "123456789" at path "_id" for model "user"',
+          name: "CastError",
+          messageFormat: undefined,
+          stringValue: id,
+          kind: undefined,
+          value: id,
+          path: "_id",
+        }),
+    };
 
+    return findUserDocById("123456789", mockModel).catch((err) => {
+      expect(err.status).toBe(404);
+      expect(err.error).toBeDefined();
+      expect(err.error.errors).toBeTruthy();
+      done();
+    });
+  });
+
+  test.skip("Deleting a user that don't exits", (done) => {
+    const mockModel = {
+      deleteOne: (obj) => Promise.reject(obj),
+    };
+
+    return deleteUserDocById("12315456787987", mockModel).catch((err) => {
+      expect(err.status).toBe(404);
+      expect(err.error).toBeDefined();
+      expect(err.error.errors).toBeTruthy();
+      done();
+    });
+  });
+});

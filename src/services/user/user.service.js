@@ -1,24 +1,15 @@
 exports.createUserDoc = (UserData, UserModel) => {
-  return UserModel.create(UserData).catch((err) => {
-    if (err.code) {
-      throw {
-        message: "Error creating an User",
-        errors: [{ message: "Email is used, please use another one" }],
-      };
-    }
-    const errors = err.errors;
-    const responseErros = Object.keys(errors).map((error) =>
-      _mapErrorsToMessage(errors[error])
-    );
-    throw {
-      message: "Error creating an User",
-      errors: responseErros,
-    };
-  });
+  return UserModel.create(UserData);
 };
 
 exports.findUserDocById = (idUser, UserModel) => {
-  return UserModel.findById(idUser);
+  return UserModel.findById(idUser).catch((err) => {
+    throw _createErrorMessage({
+      status: 404,
+      message: `Error finding user by id(${idUser})`,
+      errors: err,
+    });
+  });
 };
 
 exports.findAllUserDocs = (UserModel) => {
@@ -40,18 +31,24 @@ exports.updateUserDoc = (userId, userData, UserModel) => {
   ).then((resp) => ({ ...resp, data: { _id: userId, ...userData } }));
 };
 
-exports.deleteUserDoc = (userId, UserModel) => {
+exports.deleteUserDocById = (userId, UserModel) => {
   return UserModel.deleteOne({ _id: userId })
     .then(() => ({ id: 0, message: "User deleted" }))
     .catch((err) => {
-      throw err;
+      throw _createErrorMessage({
+        status: 404,
+        message: `Error deleting user by id(${userId})`,
+        errors: err,
+      });
     });
 };
 
-const _mapErrorsToMessage = ({ message, value, reason }) => ({
-  message,
-  value,
-  reason,
+const _createErrorMessage = ({ status, errors, message }) => ({
+  status,
+  error: {
+    message,
+    errors,
+  },
 });
 
 const _createPaginationObject = ({ page, limit }, results) => ({
