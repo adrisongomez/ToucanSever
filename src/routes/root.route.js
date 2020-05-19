@@ -1,5 +1,7 @@
 const RootRouter = require("express").Router();
 const UserRoute = require("./user/user.route");
+const PublicationRoute = require("./publication/publication.route");
+
 const {
   errorRouteHandler,
   unkwonRouteGenericHandler,
@@ -10,6 +12,7 @@ RootRouter.get("/test", (req, res, next) => {
 });
 
 RootRouter.use("/user/", UserRoute);
+RootRouter.use("/publication/", PublicationRoute);
 
 RootRouter.use(unkwonRouteGenericHandler());
 RootRouter.use(errorRouteHandler());
