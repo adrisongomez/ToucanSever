@@ -2,13 +2,13 @@ const { createPublicationDoc } = require("./publication.service");
 const {
   mockUserData,
   mockPublication,
-} = require("../../testHelpers/utils.testHelper");
+} = require("../../__mocks__/utils.testHelper");
 
 describe("User services create", () => {
   const idAuthor = "123456789";
   const idPublication = "1112333456";
   const publication = mockPublication(idAuthor);
-  test("work correctly", (done) => {
+  test.skip("work correctly", (done) => {
     const mockModel = {
       create: jest.fn((obj) =>
         Promise.resolve({
@@ -25,5 +25,17 @@ describe("User services create", () => {
       expect(resp._id).toBe(idPublication);
       done();
     });
+  });
+  test.skip("is not working", (done) => {
+    const idAuthorNotValid = "1234657897897899879";
+    const publication = mockPublication(idAuthorNotValid);
+    const mockModel = {
+      create: (obj) => {
+        console.log("from Mock")
+        return Promise.reject({ author: { message: "Author is not valid" } });
+      },
+    };
+    expect(createPublicationDoc(publication, mockModel)).rejects.toThrow();
+    done();
   });
 });

@@ -5,11 +5,15 @@ const {
 exports.createPublication = (Publication) => (req, res, next) => {
   const publicationData = getPublicationDataFromReq(req);
   res.status(201);
+
   createPublicationDoc(publicationData, Publication)
-    .then((createUser) => {
-      res.status(201).json(createUser);
+    .then((createPub) => {
+      res.status(201).json(createPub);
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      console.log(err.errors)
+      res.status(400).send(err);
+    });
 };
 
 const getPublicationDataFromReq = (req) => ({

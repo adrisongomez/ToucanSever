@@ -5,11 +5,11 @@ const {
   closeDatabase,
   dropDatabase,
   connect,
-} = require("../../testHelpers/db.testHelper");
+} = require("../../__mocks__/db.testHelper");
 const {
   mockUserData,
   mockPublication,
-} = require("../../testHelpers/utils.testHelper");
+} = require("../../__mocks__/utils.testHelper");
 
 const user = mockUserData();
 
