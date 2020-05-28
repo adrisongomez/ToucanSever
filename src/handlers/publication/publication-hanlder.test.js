@@ -1,8 +1,8 @@
 const httpMocks = require("node-mocks-http");
 const { createPublication } = require("./publication.handler");
-const { } = require("../../__mocks__/db.testHelper");
 const { mockPublication } = require("../../__mocks__/utils.testHelper");
-describe("Publication handler work correctly", () => {
+
+describe("Publication handler work correctly", async () => {
   test("Create publication", async () => {
     const mockModel = {
       create: (obj) =>

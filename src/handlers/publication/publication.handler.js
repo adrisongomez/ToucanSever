@@ -4,15 +4,16 @@ const {
 
 exports.createPublication = (Publication) => (req, res, next) => {
   const publicationData = getPublicationDataFromReq(req);
-  res.status(201);
 
   createPublicationDoc(publicationData, Publication)
     .then((createPub) => {
       res.status(201).json(createPub);
     })
     .catch((err) => {
-      console.log(err.errors)
-      res.status(400).send(err);
+      console.log(err.errors);
+      res.status(400).send({
+        hola: "hola",
+      });
     });
 };
 
