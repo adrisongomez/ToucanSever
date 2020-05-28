@@ -5,12 +5,12 @@ const endpoint = "http://localhost:8000";
 const {
   createTestApp,
   addGenericRoute,
-} = require("../../testHelpers/app.testHelper");
+} = require("../../__mocks__/app.testHelper");
 const {
   connect,
   closeDatabase,
   dropDatabase,
-} = require("../../testHelpers/db.testHelper");
+} = require("../../__mocks__/db.testHelper");
 const UserRoute = require("./user.route");
 
 const app = createTestApp();

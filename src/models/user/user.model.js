@@ -1,5 +1,5 @@
 const { model, Schema } = require("mongoose");
-const errorHandler = require("mongoose-error-handler");
+
 
 const User = Schema({
   firstName: {
@@ -62,26 +62,5 @@ const User = Schema({
     required: true,
   },
 });
-
-
-/**
- *  Handle Validation Error
- *  */
-
-const createValidationErrorHandler = (error, doc, next) => {
-  let { errors } = errorHandler.set(error);
-  if (error.name === "MongoError" && error.code === 11000) {
-    errors = { email: "Email must be unique." };
-  }
-  throw {
-    status: 422,
-    error: {
-      message: "Error creating an user",
-      errors: errors,
-    },
-  };
-};
-
-User.post("save", createValidationErrorHandler);
 
 module.exports = model("user", User);

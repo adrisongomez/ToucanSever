@@ -2,9 +2,9 @@ const {
   connect,
   closeDatabase,
   dropDatabase,
-} = require("../../testHelpers/db.testHelper");
+} = require("../../__mocks__/db.testHelper");
 const User = require("./user.model");
-const { mockUserData } = require("../../testHelpers/utils.testHelper");
+const { mockUserData } = require("../../__mocks__/utils.testHelper");
 
 describe("User model test", () => {
   beforeAll(() => connect());

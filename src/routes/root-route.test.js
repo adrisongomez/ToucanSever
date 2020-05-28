@@ -2,7 +2,7 @@ const axios = require("axios").default;
 const mongoose = require("mongoose");
 const RootRoute = require("./root.route");
 const endpoint = "http://localhost:8000/api";
-const { createTestApp } = require("../testHelpers/app.testHelper");
+const { createTestApp } = require("../__mocks__/app.testHelper");
 
 const app = createTestApp();
 app.use("/api", RootRoute);
