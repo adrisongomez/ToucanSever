@@ -4,7 +4,10 @@ const {
   mockPublication,
   mockUserData,
 } = require("../../__mocks__/utils.testHelper");
-const { createTestApp, addGenericRoute } = require("../../__mocks__/app.testHelper");
+const {
+  createTestApp,
+  addGenericRoute,
+} = require("../../__mocks__/app.testHelper");
 const {
   closeDatabase,
   connect,
@@ -17,14 +20,13 @@ const endpoint = "http://localhost:8000";
 
 app.use("/", route);
 addGenericRoute(app);
-const server = app.listen(8000);
 
 const user = mockUserData();
 
 beforeAll(async () => {
+  app.listen(8000);
   await connect();
   await dropDatabase();
-  await server.close();
 });
 
 afterAll(async () => {
@@ -37,7 +39,7 @@ afterEach(async () => {
 });
 
 describe("Publication routes work", () => {
-  test.skip("Create a publication", (done) => {
+  test("Create a publication", (done) => {
     let publication;
     User.create(user)
       .then((user) => {
@@ -52,12 +54,12 @@ describe("Publication routes work", () => {
         expect(data.author.lastName).toBe(user.lastName);
         done();
       });
-  });
-
-  test.skip("Create a publication with id User or author that doesn't exits", (done) => {
-    const idUserNotExit = "1234567894156";
-    const publication = mockPublication(idUserNotExit);
-    axios
+    });
+    
+    test("Create a publication with id User or author that doesn't exits", (done) => {
+      const idUserNotExit = "1234567894156";
+      const publication = mockPublication(idUserNotExit);
+      axios
       .post(endpoint, publication)
       .then((resp) => {
         console.log(resp);

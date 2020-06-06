@@ -10,11 +10,11 @@ const server = app.listen(8000);
 
 describe("RootRoute is working", () => {
   afterAll(async () => {
-    server.close();
     mongoose.connections.forEach(async (con) => {
       await con.close();
     });
     await mongoose.disconnect();
+    await server.close();
   });
   test("Reach /test endpoint and return status ok (200)", (done) => {
     return axios.get(`${endpoint}/test`).then((resp) => {

@@ -6,6 +6,7 @@ exports.createPublicationDoc = (publicationData, Publication) => {
         .execPopulate();
     })
     .catch((err) => {
-      console.error(mongooseError.set(err));
+      // console.error(mongooseError.set(err));
+      throw err;
     });
 };
