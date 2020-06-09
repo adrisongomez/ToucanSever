@@ -7,23 +7,11 @@ exports.createPublication = (Publication) => async (req, res, next) => {
   try {
     const response = await createPublicationDoc(publicationData, Publication);
     res.status(201).json(response);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send({
-      hola: "hola",
+  } catch (error) {
+    res.status(400).json({
+      error,
     });
   }
-
-  // createPublicationDoc(publicationData, Publication)
-  //   .then((createPub) => {
-  //     res.status(201).json(createPub);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     res.status(400).send({
-  //       hola: "hola",
-  //     });
-  // });
 };
 
 const getPublicationDataFromReq = (req) => ({

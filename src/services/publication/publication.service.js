@@ -1,3 +1,5 @@
+const mongooseError = require("mongoose-error-handler");
+
 exports.createPublicationDoc = (publicationData, Publication) => {
   return Publication.create(publicationData)
     .then((publicationDoc) => {
@@ -6,7 +8,7 @@ exports.createPublicationDoc = (publicationData, Publication) => {
         .execPopulate();
     })
     .catch((err) => {
-      // console.error(mongooseError.set(err));
-      throw err;
+      const errors = mongooseError.set(err);
+      throw errors;
     });
 };
