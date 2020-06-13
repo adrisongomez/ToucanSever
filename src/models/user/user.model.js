@@ -1,6 +1,5 @@
 const { model, Schema } = require("mongoose");
 
-
 const User = Schema({
   firstName: {
     type: String,
@@ -60,6 +59,14 @@ const User = Schema({
   address: {
     type: String,
     required: true,
+  },
+  followings: {
+    type: [Schema.Types.ObjectId],
+    ref: "Users",
+  },
+  followers: {
+    type: [Schema.Types.ObjectId],
+    ref: "Users",
   },
 });
 

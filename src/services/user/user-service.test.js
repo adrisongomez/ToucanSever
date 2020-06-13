@@ -7,6 +7,7 @@ const {
   findUserDocsPagination,
   updateUserDoc,
   deleteUserDocById,
+  addFollowToUserDoc,
 } = require("./user.service");
 
 const mockModel = {
@@ -35,6 +36,8 @@ const mockUserData = () => ({
   state: faker.address.state(),
   zipCode: faker.address.zipCode(),
   address: faker.address.streetAddress(),
+  followings: [],
+  followers: [],
 });
 
 describe("User services work", () => {
@@ -151,5 +154,38 @@ describe("When user services are not using correctly", () => {
       expect(err.error).toBeDefined();
       done();
     });
+  });
+});
+
+describe("Users add friends", () => {
+  it("work correctly", async () => {
+    const idUser = "123456789456";
+    const idFriend = "1234659878645131654";
+    const mockModel = {
+      findById: (obj) => Promise.resolve({ _id: obj, ...mockUserData() }),
+      updateOne: (id, obj) => Promise.resolve({ _id: id, ...obj }),
+    };
+    const { id, message } = await addFollowToUserDoc(
+      idUser,
+      idFriend,
+      mockModel
+    );
+    expect(id).toBe(0);
+    expect(message).toBe("You are following!");
+  });
+
+  it("work correctly unfollow", async () => {
+    const idUser = "123456789456";
+    const idFriend = "1234659878645131654";
+    const mockModel = {
+      findById: (obj) => Promise.resolve({ _id: obj, ...mockUserData(), followings:[idFriend] }),
+      updateOne: (id, obj) => Promise.resolve({ _id: obj, ...obj }),
+    };
+    const { id, message } = await addFollowToUserDoc(
+      idUser,
+      idFriend,
+      mockModel
+    );
+    expect(id).toBe(1);
   });
 });
