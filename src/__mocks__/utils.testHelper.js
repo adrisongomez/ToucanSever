@@ -9,6 +9,8 @@ exports.mockUserData = () => ({
   state: faker.address.state(),
   zipCode: faker.address.zipCode(),
   address: faker.address.streetAddress(),
+  followings: [],
+  followers: [],
 });
 
 exports.mockPublication = (id) => ({
@@ -21,4 +23,9 @@ exports.mockPublication = (id) => ({
     comment: faker.lorem.words(10),
     author: id,
   })),
+});
+
+exports.mockCommentsData = (id) => ({
+  comment: faker.lorem.words(10),
+  author: id,
 });

@@ -25,7 +25,11 @@ const Publication = Schema({
     required: [true, "Author is required"],
   },
   comments: {
-    type: [Comment],
+    type: [
+      {
+        type: Comment,
+      },
+    ],
   },
 });
 

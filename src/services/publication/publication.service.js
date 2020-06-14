@@ -4,13 +4,25 @@ exports.createPublicationDoc = (publicationData, Publication) => {
   return Publication.create(publicationData)
     .then((publicationDoc) => {
       return publicationDoc
-        .populate("author", "firstName lastName")
+        .populate("author comments.author", "firstName lastName")
         .execPopulate();
     })
     .catch((err) => {
       const errors = mongooseError.set(err);
       throw errors;
     });
+};
+
+exports.addCommentsToPublicationsDoc = async (idPub, comment, Publication) => {
+  try {
+    const publication = await Publication.findById(idPub);
+    publication.comments.push(comment);
+    await Publication.updateOne({ _id: idPub }, publication);
+    return publication;
+  } catch (err) {
+    const errors = mongooseError.set(err);
+    throw errors;
+  }
 };
 
 exports.updatePublicationDoc = (
@@ -33,14 +45,44 @@ exports.deletePublicationDoc = (idPublication, Publication) => {
       id: 0,
       message: "Publication deleted successfully",
     }))
-    .catch((err) => ({
-      status: 404,
-      message: "Publication doesn't exict",
-      id: 1,
-    }));
+    .catch((err) => {
+      throw {
+        message: "Publication not exists",
+        id: 1,
+      };
+    });
 };
 
-exports.findAllDoc = (Publication) => {
-  //*TODO: Make a Query for Friends*/
-  return Publication.find({}).then()
+exports.findPublicationDoc = async (userId, Publication, User) => {
+  try {
+    const user = await User.findById(userId).catch((err) => {
+      if (err.path === "_id") {
+        throw {
+          id: "1",
+          message: "User not valid",
+        };
+      }
+      throw err;
+    });
+    const followings = user.followings;
+    const searchIds = followings.concat(user.followers);
+    searchIds.push(user._id);
+    const resp = await Promise.all(
+      searchIds.map(async (id) => {
+        return Publication.find({ author: id });
+      })
+    );
+    let result = [];
+    resp.forEach((list) => {
+      result = result.concat(list);
+    });
+    return result;
+  } catch (err) {
+    if (err.path === "followings" || err.path === "followers") {
+      throw {
+        id: "1",
+        message: "Followings or Followers are not valids",
+      };
+    }
+  }
 };

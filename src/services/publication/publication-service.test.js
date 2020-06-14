@@ -2,18 +2,21 @@ const {
   createPublicationDoc,
   updatePublicationDoc,
   deletePublicationDoc,
+  findPublicationDoc,
+  addCommentsToPublicationsDoc,
 } = require("./publication.service");
 const {
   mockUserData,
-  mockPublication,
+  mockCommentsData,
+  mockPublication: mockPublicationData,
 } = require("../../__mocks__/utils.testHelper");
 
 const idAuthorValid = "123456789";
 const idPublication = "1112333456";
-const publication = mockPublication(idAuthorValid);
+const publication = mockPublicationData(idAuthorValid);
 const idAuthorNotValid = "1234657897897899879";
-const publicationInvalid = mockPublication(idAuthorNotValid);
-const newData = mockPublication(idAuthorValid);
+const publicationInvalid = mockPublicationData(idAuthorNotValid);
+const newData = mockPublicationData(idAuthorValid);
 
 describe("User services create", () => {
   test("it work correctly", (done) => {
@@ -35,15 +38,29 @@ describe("User services create", () => {
     });
   });
   test("it's not working", async () => {
-    const mockModel = {
-      create: (obj) => {
-        return Promise.reject({ author: { message: "Author is not valid" } });
+    const descriptionMsj = "Description is not valid";
+    const authorMsj = "Author is not valid";
+
+    const error = {
+      errors: {
+        description: {
+          message: descriptionMsj,
+        },
+        author: {
+          message: authorMsj,
+        },
       },
     };
+
+    const mockPublicationModel = {
+      create: (obj) => Promise.reject(error),
+    };
+
     try {
-      await createPublicationDoc(publicationInvalid, mockModel);
-    } catch (error) {
-      expect(error).toBeDefined();
+      await createPublicationDoc({}, mockPublicationModel);
+    } catch ({ errors: err }) {
+      expect(err.author).toBe(authorMsj);
+      expect(err.description).toBe(descriptionMsj);
     }
   });
 });
@@ -86,12 +103,129 @@ describe("Publication delete", () => {
   test("it doesn't work correctly", async () => {
     const mockModel = {
       deleteOne: (args) => Promise.reject(),
-    }
-    try{
+    };
+    try {
       await deletePublicationDoc(idAuthorNotValid, mockModel);
-    }catch(err){
-      expect(err.status).toBe(404)
-      expect(err.id).toBe(1)
+    } catch (err) {
+      expect(err.id).toBe(1);
+    }
+  });
+});
+
+describe("Finds Publications by Followings and Followers ids", () => {
+  const userId = "12341234124618264183";
+  const followingUserId = "1231wdasdasdfasdfasd";
+  const follwerUserId = "1231wdasdasdfasdfaks";
+  const mockUser = mockUserData();
+  const publicationsList = Array.from(Array(5), () =>
+    mockPublicationData(followingUserId)
+  );
+
+  it("works correctly", async () => {
+    //3 Id which are going to be query
+    mockUser.followings = [followingUserId];
+    mockUser.followers = [follwerUserId];
+    mockUser._id = userId;
+
+    const mockUserModel = {
+      findById: () => Promise.resolve(mockUser),
+    };
+
+    const mockPublicationModel = {
+      find: (obj) => Promise.resolve(publicationsList),
+    };
+
+    const result = await findPublicationDoc(
+      userId,
+      mockPublicationModel,
+      mockUserModel
+    );
+
+    /*Multiply by 3 cause everytime that findById is executed it's gonna return the same amunts
+    of Publications, so we send 3 IDs it would be return 3 * publicationsList.
+    */
+    expect(publicationsList.length * 3).toBe(result.length);
+  });
+
+  it("work incorrectly, Followings or Followers not valid", async () => {
+    const mockUserModel = {
+      findById: () => Promise.resolve(mockUser),
+    };
+
+    const mockPublicationModel = {
+      find: (obj) => Promise.reject({ path: "followings" }),
+    };
+    try {
+      await findPublicationDoc(userId, mockPublicationModel, mockUserModel);
+    } catch (err) {
+      expect(err.id).toBe("1");
+      expect(err.message).toBe("Followings or Followers are not valids");
+    }
+    const mockPublicationModel2 = {
+      find: (obj) => Promise.reject({ path: "followers" }),
+    };
+    try {
+      await findPublicationDoc(userId, mockPublicationModel2, mockUserModel);
+    } catch (err) {
+      expect(err.id).toBe("1");
+      expect(err.message).toBe("Followings or Followers are not valids");
+    }
+  });
+
+  it("work incorrectly, User not valid", async () => {
+    const mockUserModel = {
+      findById: () => Promise.reject({ path: "_id" }),
+    };
+    const mockPublicationModel = {};
+    try {
+      await findPublicationDoc(userId, mockPublicationModel, mockUserModel);
+    } catch (err) {
+      expect(err.id).toBe("1");
+      expect(err.message).toBe("User not valid");
+    }
+  });
+});
+
+describe("Add comments to Publications", () => {
+  const mockIdUser = "1235asdfasd";
+  const mockUser = mockUserData();
+  const mockPub = mockPublicationData(mockIdUser);
+  const mockIdPub = "1213216546561237";
+  const comment = mockCommentsData(mockIdUser);
+
+  it("work correctly", async () => {
+    const mockPublicationModel = {
+      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
+      updateOne: (id, obj) => Promise.resolve({ _id: id._id, ...obj }),
+    };
+    const result = await addCommentsToPublicationsDoc(
+      mockIdPub,
+      comment,
+      mockPublicationModel
+    );
+    expect(result.comments.length).toBe(mockPub.comments.length);
+  });
+
+  it("work incorrectly, Author not valid", async () => {
+    const mockPublicationModel = {
+      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
+      updateOne: (id, obj) =>
+        Promise.reject({
+          errors: {
+            "comments.0.author": {
+              message: "Author not valid",
+            },
+          },
+        }),
+    };
+    try {
+      await addCommentsToPublicationsDoc(
+        mockIdPub,
+        comment,
+        mockPublicationModel
+      );
+    } catch ({ errors }) {
+      expect(errors["comments.0.author"]).toBe("Author not valid");
     }
   });
 });
