@@ -7,9 +7,3 @@ This's app is just for learning purpose. The entire app is build in Javascript w
 
 This app arquitecture is based in MVC pattern, using Mongoose in Model Layer.
 
-List:
-
-## TODO: Make Bad PAth in User Route
-
-## TODO: Module UserAuth Password and Username with a Salt Algorim
-## TODO: Module UserAuth By Google Account or Facebook Account or another account
