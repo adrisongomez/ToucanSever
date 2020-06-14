@@ -16,7 +16,7 @@ describe("RootRoute is working", () => {
     await mongoose.disconnect();
     await server.close();
   });
-  test("Reach /test endpoint and return status ok (200)", (done) => {
+  test.skip("Reach /test endpoint and return status ok (200)", (done) => {
     return axios.get(`${endpoint}/test`).then((resp) => {
       expect(resp.status).toBe(200);
       done();

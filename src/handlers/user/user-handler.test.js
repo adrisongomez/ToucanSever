@@ -5,6 +5,7 @@ const {
   findUserById,
   findUsers,
   updateUser,
+  toggleFollowUser,
 } = require("./user.handler");
 const faker = require("faker");
 
@@ -17,6 +18,8 @@ const mockUserData = () => ({
   state: faker.address.state(),
   zipCode: faker.address.zipCode(),
   address: faker.address.streetAddress(),
+  followings: [],
+  followers: [],
 });
 
 describe("User handlers are working correctly", () => {
@@ -107,6 +110,7 @@ describe("User handlers are working correctly", () => {
   });
 
   test("Update user", () => {
+    const data = mockUserData();
     const mockModel = {
       updateOne: ({ _id }, data) => Promise.resolve({ _id, ...data }),
     };
@@ -120,6 +124,28 @@ describe("User handlers are working correctly", () => {
     });
     const response = httpMocks.createResponse();
     updateUser(mockModel)(request, response);
+    expect(response.statusCode).toBe(200);
+  });
+
+  test("Toggle user following and followers", async () => {
+    const mockModel = {
+      findById: (obj) => Promise.resolve({ _id: obj, ...mockUserData() }),
+      updateOne: (id, obj) => Promise.resolve({ _id: id, ...obj }),
+    };
+    const userId = "123456789123";
+    const anotherUserId = "1111122223334445566";
+    const request = httpMocks.createRequest({
+      method: "GET",
+      url: "/api/user/following",
+      body: {
+        userId: userId,
+        anotherUserId: anotherUserId,
+      },
+    });
+    const response = httpMocks.createResponse();
+    await toggleFollowUser(mockModel)(request, response);
+    const resp = await response._getJSONData();
+    expect(resp.id).toBe(0);
     expect(response.statusCode).toBe(200);
   });
 });

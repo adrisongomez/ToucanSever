@@ -7,7 +7,7 @@ const {
   findUserDocsPagination,
   updateUserDoc,
   deleteUserDocById,
-  addFollowToUserDoc,
+  toggleFollowToUserDoc,
 } = require("./user.service");
 
 const mockModel = {
@@ -165,7 +165,7 @@ describe("Users add friends", () => {
       findById: (obj) => Promise.resolve({ _id: obj, ...mockUserData() }),
       updateOne: (id, obj) => Promise.resolve({ _id: id, ...obj }),
     };
-    const { id, message } = await addFollowToUserDoc(
+    const { id, message } = await toggleFollowToUserDoc(
       idUser,
       idFriend,
       mockModel
@@ -181,7 +181,7 @@ describe("Users add friends", () => {
       findById: (obj) => Promise.resolve({ _id: obj, ...mockUserData(), followings:[idFriend] }),
       updateOne: (id, obj) => Promise.resolve({ _id: obj, ...obj }),
     };
-    const { id, message } = await addFollowToUserDoc(
+    const { id, message } = await toggleFollowToUserDoc(
       idUser,
       idFriend,
       mockModel
