@@ -81,15 +81,15 @@ exports.deleteUser = (User) => (req, res, next) => {
 };
 
 exports.toggleFollowUser = (User) => async (req, res, next) => {
-try{
- const userId = req.body.idUser;
- const anotherUserId = req.body.anotherUserId;
- const resp = await toggleFollowToUserDoc(userId, anotherUserId, User);
- res.status(200).json(resp);
-}catch(err){
-console.log(err);
-}
-}
+  try {
+    const userId = req.body.userId;
+    const anotherUserId = req.body.anotherUserId;
+    const resp = await toggleFollowToUserDoc(userId, anotherUserId, User);
+    res.status(200).json(resp);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const getUserFromRequest = (req) => ({
   firstName: req.body.firstName,
   lastName: req.body.lastName,

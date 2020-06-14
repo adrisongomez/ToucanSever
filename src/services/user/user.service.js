@@ -72,8 +72,8 @@ exports.toggleFollowToUserDoc = async (userId, friendId, UserModel) => {
 
   user.followings.push(friend._id);
   friend.followers.push(user._id);
-  await UserModel.updateOne(userId, user);
-  await UserModel.updateOne(friendId, friend);
+  await UserModel.updateOne({_id: userId}, user);
+  await UserModel.updateOne({_id: friendId}, friend);
   return { id: 0, message: "You are following!" };
 };
 

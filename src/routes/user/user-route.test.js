@@ -6,11 +6,13 @@ const {
   createTestApp,
   addGenericRoute,
 } = require("../../__mocks__/app.testHelper");
+
 const {
   connect,
   closeDatabase,
   dropDatabase,
 } = require("../../__mocks__/db.testHelper");
+
 const UserRoute = require("./user.route");
 
 const app = createTestApp();
@@ -24,9 +26,14 @@ const mockUserData = () => ({
   state: faker.address.state(),
   zipCode: faker.address.zipCode(),
   address: faker.address.streetAddress(),
+  followings: [],
+  followers: [],
 });
+
 app.use("/", UserRoute);
+
 addGenericRoute(app);
+
 const server = app.listen(8000);
 
 beforeAll(async () => {
@@ -132,6 +139,22 @@ describe("User routes are using correctly", () => {
         expect(resp.data.message).toBe("User deleted");
         done();
       });
+  });
+  test("Follow a user by Id User", async () => {
+    const mockUser = mockUserData();
+    const mockUser2 = mockUserData();
+    const getUserData = async (mockUser) => {
+      const resp = await axios.post(endpoint, mockUser);
+      return resp.data.user;
+    };
+    const user = await getUserData(mockUser);
+    const anotherUser = await getUserData(mockUser2);
+    const response = await axios.post(`${endpoint}/follow`, {
+      userId: user._id,
+      anotherUserId: anotherUser._id,
+    });
+    const responseJson = response.data;
+    expect(responseJson.id).toBe(0);
   });
 });
 
