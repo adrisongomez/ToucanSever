@@ -63,10 +63,10 @@ describe("User routes are using correctly", () => {
     const user2 = await axios
       .post(endpoint, mockUser2)
       .then((resp) => resp.data.user);
-    const allUser = await axios
+    const response = await axios
       .get(`${endpoint}/${user1._id}`)
       .then((resp) => resp.data);
-    expect(allUser._id).toBe(user1._id);
+    expect(response._id).toBe(user1._id);
     done();
   });
 

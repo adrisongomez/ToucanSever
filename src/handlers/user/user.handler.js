@@ -86,7 +86,6 @@ try{
  const anotherUserId = req.body.anotherUserId;
  const resp = await toggleFollowToUserDoc(userId, anotherUserId, User);
  res.status(200).json(resp);
- return res;
 }catch(err){
 console.log(err);
 }
