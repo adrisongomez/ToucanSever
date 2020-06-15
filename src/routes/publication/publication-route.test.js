@@ -16,15 +16,16 @@ const {
 const User = require("../../models/user/user.model");
 
 const app = createTestApp();
-const endpoint = "http://localhost:8000/";
+const endpoint = "http://localhost:8000";
 
 app.use("/", route);
 addGenericRoute(app);
 
-const userData = mockUserData();
+const user = mockUserData();
+
+const server = app.listen(8000);
 
 beforeAll(async () => {
-  await app.listen(8000);
   await connect();
   await dropDatabase();
 });
@@ -39,33 +40,38 @@ afterEach(async () => {
 });
 
 describe("Publication routes work", () => {
-  test.skip("Create a publication", async () => {
-    try {
-      const user = await User.create(mockUserData);
-      const publication = mockPublication(user._id);
-      const response = await axios.post(endpoint, publication);
-      const data = response.data;
-      console.log(response);
-      expect(status).toBe(201);
-      expect(data.description).toBe(publication.description);
-      expect(data.author._id == publication.author).toBe(true);
-      expect(data.author.firstName).toBe(user.firstName);
-      expect(data.author.lastName).toBe(user.lastName);
-      done();
-    } catch (err) {
-      console.log(err);
-    }
-  });
-
-  test.skip("Create a publication with id User or author that doesn't exits", async () => {
-    try {
+  test.skip("Create a publication", (done) => {
+    let publication;
+    User.create(user)
+      .then((user) => {
+        publication = mockPublication(user._id);
+        return axios.post(endpoint, publication);
+      })
+      .then(({ status, data }) => {
+        expect(status).toBe(201);
+        expect(data.description).toBe(publication.description);
+        expect(data.author._id == publication.author).toBe(true);
+        expect(data.author.firstName).toBe(user.firstName);
+        expect(data.author.lastName).toBe(user.lastName);
+        done();
+      });
+    });
+    
+    test.skip("Create a publication with id User or author that doesn't exits", (done) => {
       const idUserNotExit = "1234567894156";
       const publication = mockPublication(idUserNotExit);
-      await axios.post(endpoint, publication);
-    } catch (err) {
-      console.log(err.response.data);
-      const data = err.response.data.error.errors;
-      expect(data.author).toBeDefined();
-    }
+      axios
+      .post(endpoint, publication)
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+        expect(err.author).toBe("Author not valid");
+        expect(err.status).toBe(400);
+        done();
+      });
   });
 });
+
+server.close();

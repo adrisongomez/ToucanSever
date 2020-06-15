@@ -36,7 +36,15 @@ exports.updatePublicationDoc = (
         .populate("author", "firstName lastName")
         .execPopulate();
     }
-  );
+  ).catch(err => {
+    if(err.path="_id"){
+      throw({
+        id: 1,
+        message: "Publication not exists"
+      })
+    }
+    throw err;
+  });
 };
 
 exports.deletePublicationDoc = (idPublication, Publication) => {
@@ -53,17 +61,9 @@ exports.deletePublicationDoc = (idPublication, Publication) => {
     });
 };
 
-exports.findPublicationDoc = async (userId, Publication, User) => {
+exports.getAllPublicationDoc = async (userId, Publication, User) => {
   try {
-    const user = await User.findById(userId).catch((err) => {
-      if (err.path === "_id") {
-        throw {
-          id: "1",
-          message: "User not valid",
-        };
-      }
-      throw err;
-    });
+    const user = await User.findById(userId);
     const followings = user.followings;
     const searchIds = followings.concat(user.followers);
     searchIds.push(user._id);
@@ -84,5 +84,37 @@ exports.findPublicationDoc = async (userId, Publication, User) => {
         message: "Followings or Followers are not valids",
       };
     }
+    if (err.path === "_id") {
+      throw {
+        id: "1",
+        message: "User not valid",
+      };
+    }
+    throw err;
+  }
+};
+
+exports.findByIdPublicationDoc = async (idPublications, Publication) => {
+  try {
+    return await Publication.findById(idPublications);
+  } catch (err) {
+    if (err.path === "_id") {
+      throw {
+        id: 1,
+        message: "Publication not exists",
+      };
+    }
+    throw err;
+  }
+};
+
+exports.findByIdPublicationDocByUserId = async (idUser, Publication) => {
+  try {
+    return await Publication.find({ author: idUser });
+  } catch (error) {
+    if (error.path === "author") {
+      throw { id: 1, message: "User Id not exists" };
+    }
+    throw error;
   }
 };
