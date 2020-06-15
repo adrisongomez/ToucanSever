@@ -2,8 +2,10 @@ const {
   createPublicationDoc,
   updatePublicationDoc,
   deletePublicationDoc,
-  findPublicationDoc,
+  getAllPublicationDoc: findPublicationDoc,
   addCommentsToPublicationsDoc,
+  findByIdPublicationDoc,
+  findByIdPublicationDocByUserId,
 } = require("./publication.service");
 const {
   mockUserData,
@@ -87,7 +89,7 @@ describe("Publication update", () => {
     try {
       await updatePublicationDoc(idAuthorNotValid, newData, mockModel);
     } catch (err) {
-      expect(err.error).toBe("Reject");
+      expect(err.id).toBe(1);
     }
   });
 });
@@ -226,6 +228,56 @@ describe("Add comments to Publications", () => {
       );
     } catch ({ errors }) {
       expect(errors["comments.0.author"]).toBe("Author not valid");
+    }
+  });
+});
+
+describe("Find publication by Publication Id", () => {
+  const mockIdPub = "12312132121313213132";
+  const mockPub = mockPublicationData();
+  it("work correctly", async () => {
+    const mockModel = {
+      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
+    };
+    const result = await findByIdPublicationDoc(mockIdPub, mockModel);
+    expect(result.description).toBe(mockPub.description);
+    expect(result._id).toBe(mockIdPub);
+  });
+
+  it("work incorrectly, Publications Id not valid", async () => {
+    const mockModel = {
+      findById: (_id) => Promise.reject({ path: "_id" }),
+    };
+    try {
+      await findByIdPublicationDoc(mockIdPub, mockModel);
+    } catch (err) {
+      expect(err.id).toBe(1);
+      expect(err.message).toBe("Publication not exists");
+    }
+  });
+});
+
+describe("Find publication by User Id", () => {
+  const mockIdUser = "1231541235412";
+  const mockPub = Array.from(Array(5), () => mockPublicationData(mockIdUser));
+
+  it("work correctly", async () => {
+    const mockModel = {
+      find: (obj) => Promise.resolve(mockPub),
+    };
+    const result = await findByIdPublicationDocByUserId(mockIdUser, mockModel);
+    expect(result.length).toBe(5);
+  });
+
+  it("work incorrectly, User Id not valid", async () => {
+    const mockModel = {
+      find: (obj) => Promise.reject({ path: "author" }),
+    };
+    try{
+      await findByIdPublicationDocByUserId(mockIdUser, mockModel);
+    }catch(error){
+      expect(error.id).toBe(1);
+      expect(error.message).toBe("User Id not exists")
     }
   });
 });

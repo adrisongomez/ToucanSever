@@ -1,9 +1,18 @@
 const httpMocks = require("node-mocks-http");
 const {
   createPublication,
+  addCommentToPublication,
   deletePublications,
+  getAllPublication,
+  findPublication,
+  findPublicationByUserId,
+  updatePublication,
 } = require("./publication.handler");
-const { mockPublication } = require("../../__mocks__/utils.testHelper");
+const {
+  mockPublication,
+  mockCommentsData,
+  mockUserData,
+} = require("../../__mocks__/utils.testHelper");
 
 describe("Publication create", () => {
   it("work correctly", async () => {
@@ -111,5 +120,274 @@ describe("Publications delete", () => {
     expect(res.statusCode).toBe(404);
     expect(result.id).toBe(1);
     expect(result.message).toBe("Publication not exists");
+  });
+});
+
+describe("Publication add comments", () => {
+  const mockIdPu = "12312145621";
+  const mockPub = mockPublication("123456");
+  const comment = mockCommentsData("123123");
+
+  it("work correctly", async () => {
+    const mockModel = {
+      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
+      updateOne: (obj, updateObj) =>
+        Promise.resolve({ _id: obj._id, ...updateObj }),
+    };
+    const req = httpMocks.createRequest({
+      method: "POST",
+      url: "/api/publication",
+      body: {
+        ...comment,
+      },
+      params: {
+        idPublications: mockIdPu,
+      },
+    });
+    const res = httpMocks.createResponse();
+    const next = (obj) => {};
+    await addCommentToPublication(mockModel)(req, res, next);
+    const result = res._getJSONData();
+    expect(res.statusCode).toBe(201);
+    expect(result.comments.length).toBe(mockPub.comments.length);
+  });
+
+  it("work incorrectly, Empty comment and Author not valid", async () => {
+    const mockModel = {
+      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
+      updateOne: (obj, updateObj) =>
+        Promise.reject({
+          errors: {
+            "comments.0.author": {
+              message: "Author not valid",
+            },
+            "comments.0.comment": {
+              message: "Comment must not be empty",
+            },
+          },
+        }),
+    };
+    const req = httpMocks.createRequest({
+      method: "POST",
+      url: "/api/publication",
+      body: {
+        ...comment,
+      },
+      params: {
+        idPublications: mockIdPu,
+      },
+    });
+    const res = httpMocks.createResponse();
+    const next = () => {};
+    await addCommentToPublication(mockModel)(req, res, next);
+    const { errors } = res._getJSONData();
+    expect(errors["comments.0.author"]).toBeDefined();
+    expect(res.statusCode).toBe(422);
+  });
+
+  it("work incorrectly, IdPub not valid", async () => {
+    const mockModel = {
+      findById: (_id) =>
+        Promise.reject({
+          errors: {
+            _id: {
+              message: "_Id not Valid",
+            },
+          },
+        }),
+    };
+    const req = httpMocks.createRequest({
+      method: "POST",
+      url: "/api/publication",
+      body: {
+        ...comment,
+      },
+      params: {
+        idPublications: mockIdPu,
+      },
+    });
+    const res = httpMocks.createResponse();
+    const next = () => {};
+    await addCommentToPublication(mockModel)(req, res, next);
+    const { errors } = res._getJSONData();
+    expect(errors._id).toBeDefined();
+    expect(res.statusCode).toBe(422);
+  });
+});
+
+describe("Get publications for User", () => {
+  const mockUser = mockUserData();
+  const mockIdUser = "12312465465465";
+  const mockPub = Array.from(Array(5), () => mockPublication(mockIdUser));
+  it("work correctly", async () => {
+    const mockUserModel = {
+      findById: (_id) => Promise.resolve({ _id, ...mockUser }),
+    };
+    const mockPublicationModel = {
+      find: (obj) => Promise.resolve(mockPub),
+    };
+
+    const req = httpMocks.createRequest({
+      method: "GET",
+      url: "/api/publication",
+      params: {
+        idUser: mockIdUser,
+      },
+    });
+
+    const res = httpMocks.createResponse();
+
+    const next = (obj) => {};
+
+    await getAllPublication(mockPublicationModel, mockUserModel)(
+      req,
+      res,
+      next
+    );
+    const result = res._getJSONData();
+    expect(res.statusCode).toBe(200);
+    expect(result.length).toBe(5);
+  });
+
+  it("work incorrectly, User not valid", async () => {
+    const mockUserModel = {
+      findById: (_id) =>
+        Promise.reject({
+          path: "_id",
+        }),
+    };
+    const mockPublicationModel = {};
+
+    const req = httpMocks.createRequest({
+      method: "GET",
+      url: "/api/publication",
+      params: {
+        idUser: mockIdUser,
+      },
+    });
+
+    const res = httpMocks.createResponse();
+
+    const next = (obj) => {};
+
+    await getAllPublication(mockPublicationModel, mockUserModel)(
+      req,
+      res,
+      next
+    );
+    const { id } = res._getJSONData();
+    expect(res.statusCode).toBe(400);
+    expect(id).toBe("1");
+  });
+});
+
+describe("Find publications by Publication Id", () => {
+  const mockIdPub = "12313235";
+  const mockPub = mockPublication(mockIdPub);
+  const req = httpMocks.createRequest({
+    method: "GET",
+    url: "/api/publication/detail",
+    params: {
+      idPublication: mockIdPub,
+    },
+  });
+  const res = httpMocks.createResponse();
+  let nextFn;
+  const next = (err) => (nextFn = err);
+
+  it("work correctly", async () => {
+    const mockPublicationModel = {
+      findById: (_id) => Promise.resolve(mockPub),
+    };
+    await findPublication(mockPublicationModel)(req, res, next);
+    const result = res._getJSONData();
+    expect(result.description).toBe(mockPub.description);
+  });
+
+  it("work incorrectly, Publication Id not valid", async () => {
+    const mockPublicationModel = {
+      findById: (_id) => Promise.reject({ path: "_id" }),
+    };
+    await findPublication(mockPublicationModel)(req, res, next);
+    expect(nextFn.error.id).toBe(1);
+    expect(nextFn.error.message).toBe("Publication not exists");
+  });
+});
+
+describe("Find publication by User Id", () => {
+  const mockIdUser = "121315asdasd1232";
+  const mockPub = Array.from(Array(5), () => mockPublication(mockIdUser));
+  const req = httpMocks.createRequest({
+    method: "GET",
+    url: "/api/publication/detail",
+    params: {
+      idUser: mockIdUser,
+    },
+  });
+  const res = httpMocks.createResponse();
+  let nextFn;
+  const next = (err) => (nextFn = err);
+
+  it("work correctly", async () => {
+    const mockModel = {
+      find: (author) => Promise.resolve(mockPub),
+    };
+    await findPublicationByUserId(mockModel)(req, res, next);
+    const result = res._getJSONData();
+    expect(result.length).toBe(5);
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("work incorrectly, User Id not valid", async () => {
+    const mockModel = {
+      find: (author) => Promise.reject({ path: "author" }),
+    };
+    await findPublicationByUserId(mockModel)(req, res, next);
+    const { error, status } = nextFn;
+    expect(status).toBe(404);
+  });
+});
+
+describe("Update publication", () => {
+  const mockIdPub = "1232451657899";
+  const mockPub = mockPublication(mockIdPub);
+  const req = httpMocks.createRequest({
+    method: "PUT",
+    url: "/api/publication",
+    params: {
+      idPublication: mockIdPub,
+    },
+    body: {
+      ...mockPub,
+    },
+  });
+  const res = httpMocks.createResponse();
+  let nextFn;
+  const next = (err) => (nextFn = err);
+
+  it("work correctly", async () => {
+    const mockModel = {
+      updateOne: (obj) =>
+        Promise.resolve({
+          populate: ([args]) => ({
+            execPopulate: () => Promise.resolve({ _id: obj._id, ...mockPub }),
+          }),
+        }),
+    };
+    await updatePublication(mockModel)(req, res, next);
+    const result = res._getJSONData();
+    expect(result.description).toBe(mockPub.description);
+    expect(result.author).toBe(mockPub.author);
+  });
+
+  it("work incorrectly, Publication Id not valid", async () => {
+    const mockModel = {
+      updateOne: (obj) => Promise.reject({ path: "_id" }),
+    };
+    await updatePublication(mockModel)(req, res, next);
+    const { status, error } = nextFn;
+    expect(status).toBe(404);
+    expect(error.id).toBe(1);
+    expect(error.message).toBe("Publication not exists");
   });
 });
