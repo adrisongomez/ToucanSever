@@ -16,7 +16,7 @@ const PublicationRoutes = Router();
 
 PublicationRoutes.post("/", createPublication(Publication));
 PublicationRoutes.post("/comment/:idPublication", addCommentToPublication(Publication));
-PublicationRoutes.delete("/", deletePublications(Publication));
+PublicationRoutes.delete("/:idPublication", deletePublications(Publication));
 PublicationRoutes.get("/land/:idUser", getAllPublication(Publication, User));
 PublicationRoutes.get("/:idPublication", findPublication(Publication, User));
 PublicationRoutes.get("/user/:idUser", findPublicationByUserId(Publication, User));
