@@ -14,7 +14,6 @@ exports.createPublication = (Publication) => async (req, res, next) => {
     const response = await createPublicationDoc(publicationData, Publication);
     res.status(201).json(response);
   } catch (error) {
-    res.status(400).json(error);
     next({
       status: 400,
       error,
@@ -28,8 +27,7 @@ exports.deletePublications = (Publication) => async (req, res, next) => {
     const result = await deletePublicationDoc(idPub, Publication);
     res.status(200).json(result);
   } catch (err) {
-    res.status(404).json(err);
-    next({ status: 404, err });
+    next({ status: 404, error:err });
   }
 };
 
@@ -46,8 +44,8 @@ exports.addCommentToPublication = (Publication) => async (req, res, next) => {
       Publication
     );
     res.status(201).json(result);
-  } catch (err) {
-    res.status(422).json(err);
+  } catch (error) {
+    next({ status: 422, error });
   }
 };
 
@@ -57,7 +55,7 @@ exports.getAllPublication = (Publication, User) => async (req, res, next) => {
     const result = await getAllPublicationDoc(idUser, Publication, User);
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).json(err);
+    next({ status: 400, error: err });
   }
 };
 

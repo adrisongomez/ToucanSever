@@ -9,7 +9,8 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "sandbox": "nodemon sandbox_code.js",
     "test": "jest --runInBand --detectOpenHandles"
   },

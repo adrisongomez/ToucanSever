@@ -68,8 +68,9 @@ describe("Publication create", () => {
     });
 
     const res = httpMocks.createResponse();
+    const next = (obj) => {res.status(obj.status).json(obj.error)};
 
-    await createPublication(mockPublicationModel)(req, res, (obj) => {});
+    await createPublication(mockPublicationModel)(req, res, next);
     const { errors } = res._getJSONData();
     expect(res.statusCode).toBe(400);
     expect(errors.author).toBe(authorMsj);
@@ -114,8 +115,11 @@ describe("Publications delete", () => {
       url: "/api/publication/",
     });
     const res = httpMocks.createResponse();
+    const next = (obj) => {
+      res.status(obj.status).json(obj.error);
+    };
 
-    await deletePublications(mockModel)(req, res, (obj) => {});
+    await deletePublications(mockModel)(req, res, next);
     const result = res._getJSONData();
     expect(res.statusCode).toBe(404);
     expect(result.id).toBe(1);
@@ -178,7 +182,9 @@ describe("Publication add comments", () => {
       },
     });
     const res = httpMocks.createResponse();
-    const next = () => {};
+    const next = (obj) => {
+      res.status(obj.status).json(obj.error);
+    };
     await addCommentToPublication(mockModel)(req, res, next);
     const { errors } = res._getJSONData();
     expect(errors["comments.0.author"]).toBeDefined();
@@ -207,7 +213,9 @@ describe("Publication add comments", () => {
       },
     });
     const res = httpMocks.createResponse();
-    const next = () => {};
+    const next = (obj) => {
+      res.status(obj.status).json(obj.error);
+    };
     await addCommentToPublication(mockModel)(req, res, next);
     const { errors } = res._getJSONData();
     expect(errors._id).toBeDefined();
@@ -257,7 +265,8 @@ describe("Get publications for User", () => {
         }),
     };
     const mockPublicationModel = {};
-
+    let nextFn;
+    const next = (err) => (nextFn = err);
     const req = httpMocks.createRequest({
       method: "GET",
       url: "/api/publication",
@@ -268,15 +277,16 @@ describe("Get publications for User", () => {
 
     const res = httpMocks.createResponse();
 
-    const next = (obj) => {};
-
     await getAllPublication(mockPublicationModel, mockUserModel)(
       req,
       res,
       next
     );
-    const { id } = res._getJSONData();
-    expect(res.statusCode).toBe(400);
+    const {
+      status,
+      error: { id },
+    } = nextFn;
+    expect(status).toBe(400);
     expect(id).toBe("1");
   });
 });
