@@ -20,6 +20,7 @@ exports.addCommentsToPublicationsDoc = async (idPub, comment, Publication) => {
     await Publication.updateOne({ _id: idPub }, publication);
     return publication;
   } catch (err) {
+    if(err.path==="_id") throw {id: 1, message: "Publication not exists"}
     const errors = mongooseError.set(err);
     throw errors;
   }

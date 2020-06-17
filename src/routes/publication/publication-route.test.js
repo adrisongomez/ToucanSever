@@ -21,6 +21,7 @@ const {
 
 const User = require("../../models/user/user.model");
 const Publication = require("../../models/publication/publication.model");
+const { response } = require("express");
 
 const app = createTestApp();
 
@@ -46,7 +47,7 @@ afterEach(async () => {
   await dropDatabase();
 });
 
-describe("Publication routes work", () => {
+describe("Publication routes happy path", () => {
   const user = mockUserData();
 
   const getPubAndUserDB = async () => {
@@ -99,7 +100,7 @@ describe("Publication routes work", () => {
     const { status, data } = await axios.get(url);
     expect(status).toBe(200);
     expect(data.description).toBe(publication.description);
-  })
+  });
 
   test("find a publication by user id", async () => {
     const { publication, user } = await getPubAndUserDB();
@@ -116,5 +117,103 @@ describe("Publication routes work", () => {
     const { status, data } = await axios.put(url, publication);
     expect(status).toBe(200);
     expect(data.description).toBe(publication.description);
+  });
+});
+
+describe("Publication route bad path", () => {
+  const idPubNotExists = "1";
+  const idUserNotExists = "1";
+
+  test("Create a publication", async () => {
+    const url = `${endpoint}`;
+    try {
+      await axios.post(url, {});
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(400);
+      expect(data.errors.author).toBeDefined();
+      expect(data.errors.description).toBeDefined();
+    }
+  });
+
+  test("Create a publication with author id that doesn't exists", async () => {
+    const url = `${endpoint}`;
+    try {
+      await axios.post(url, mockPublication(idUserNotExists));
+    } catch (error) {
+      const {
+        status,
+        data: { errors },
+      } = error.response;
+      expect(status).toBe(400);
+      expect(errors.author).toBeDefined();
+    }
+  });
+
+  test("Add a comment to a publication that doesn't exists", async () => {
+    const url = `${endpoint}/comment/${idPubNotExists}`;
+    const comment = mockCommentsData(idUserNotExists);
+    try {
+      await axios.post(url, comment);
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(422);
+      expect(data.id).toBe(1);
+    }
+  });
+
+  test("Delete a publication that doesn't exists", async () => {
+    const url = `${endpoint}/${idPubNotExists}`;
+    try {
+      await axios.delete(url);
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(404);
+      expect(data.id).toBe(1);
+    }
+  });
+
+  test("Get all publication for landing page by idUser", async () => {
+    const url = `${endpoint}/land/${idUserNotExists}`;
+    try {
+      await axios.get(url);
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(400);
+      expect(data.id).toBe("1");
+    }
+  });
+
+  test("Find publication by Publication Id", async () => {
+    try {
+      const url = `${endpoint}/${idPubNotExists}`;
+      await axios.get(url);
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(400);
+      expect(data.id).toBe(1);
+    }
+  });
+
+  test("Find publications by User Id", async () => {
+    const url = `${endpoint}/user/${idUserNotExists}`;
+    try {
+      await axios.get(url);
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(404);
+      expect(data.id).toBe(1);
+    }
+  });
+
+  test("Find publication by Publication Id", async () => {
+    const url = `${endpoint}/${idPubNotExists}`;
+    try {
+      await axios.get(url);
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(400);
+      expect(data.id).toBe(1);
+    }
   });
 });
