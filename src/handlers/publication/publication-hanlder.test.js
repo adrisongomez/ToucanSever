@@ -367,7 +367,8 @@ describe("Update publication", () => {
 
   it("work correctly", async () => {
     const mockModel = {
-      updateOne: (obj) =>
+      updateOne: () => Promise.resolve(),
+      findById: (obj) =>
         Promise.resolve({
           populate: ([args]) => ({
             execPopulate: () => Promise.resolve({ _id: obj._id, ...mockPub }),

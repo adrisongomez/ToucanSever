@@ -70,10 +70,11 @@ describe("User services create", () => {
 describe("Publication update", () => {
   test("it Work correctly", async () => {
     const mockModel = {
-      updateOne: ({ _id }) =>
+      updateOne: () => Promise.resolve(),
+      findById: (_id) =>
         Promise.resolve({
           populate: ([args]) => ({
-            execPopulate: () => ({ _id, ...newData }),
+            execPopulate: () => Promise.resolve({ _id, ...newData }),
           }),
         }),
     };
@@ -84,7 +85,7 @@ describe("Publication update", () => {
 
   test("it's not working", async () => {
     const mockModel = {
-      updateOne: ({ _id }) => Promise.reject({ error: "Reject" }),
+      updateOne: (obj) => Promise.reject({ path: "_id" }),
     };
     try {
       await updatePublicationDoc(idAuthorNotValid, newData, mockModel);
@@ -273,11 +274,11 @@ describe("Find publication by User Id", () => {
     const mockModel = {
       find: (obj) => Promise.reject({ path: "author" }),
     };
-    try{
+    try {
       await findByIdPublicationDocByUserId(mockIdUser, mockModel);
-    }catch(error){
+    } catch (error) {
       expect(error.id).toBe(1);
-      expect(error.message).toBe("User Id not exists")
+      expect(error.message).toBe("User Id not exists");
     }
   });
 });

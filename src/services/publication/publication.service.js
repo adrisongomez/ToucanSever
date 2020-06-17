@@ -25,26 +25,28 @@ exports.addCommentsToPublicationsDoc = async (idPub, comment, Publication) => {
   }
 };
 
-exports.updatePublicationDoc = (
+exports.updatePublicationDoc = async (
   idPublication,
   publicationNewData,
   Publication
 ) => {
-  return Publication.updateOne({ _id: idPublication }, publicationNewData).then(
-    (publicationDoc) => {
-      return publicationDoc
-        .populate("author", "firstName lastName")
+  try {
+    await Publication.updateOne({ _id: idPublication }, publicationNewData);
+    const pub = await Publication.findById(idPublication).then((doc) => {
+      return doc
+        .populate("author comments.author", "firstName lastName")
         .execPopulate();
-    }
-  ).catch(err => {
-    if(err.path="_id"){
-      throw({
+    });
+    return pub;
+  } catch (error) {
+    if (error.path === "_id") {
+      throw {
         id: 1,
-        message: "Publication not exists"
-      })
+        message: "Publication not exists",
+      };
     }
-    throw err;
-  });
+    throw error;
+  }
 };
 
 exports.deletePublicationDoc = (idPublication, Publication) => {

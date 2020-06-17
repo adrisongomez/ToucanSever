@@ -92,7 +92,6 @@ exports.updatePublication = (Publication) => async (req, res, next) => {
     );
     res.status(200).json(result);
   } catch (error) {
-    console.log(error)
     next({ status: 404, error });
   }
 };
