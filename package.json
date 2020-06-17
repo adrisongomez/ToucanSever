@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Toucan Services App server",
   "main": "index.js",
-  "repository": "s",
+  "repository": "https://github.com/Ad0197/ToucanSever",
   "author": "Adrison Junior Gomez Gomez",
   "jest": {
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "12.16.2"
   },
   "scripts": {
     "start": "node index.js",
