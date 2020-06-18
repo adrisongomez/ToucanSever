@@ -1,6 +1,7 @@
 node_modules
 coverage
 /sandbox_code.js
+.next
 
 # env
 
