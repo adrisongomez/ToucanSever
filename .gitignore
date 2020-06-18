@@ -1,3 +1,15 @@
 node_modules
 coverage
 /sandbox_code.js
+
+# env
+
+.env
+.env.develop
+.env.production
+
+# bin
+
+bin/
+
+test.js

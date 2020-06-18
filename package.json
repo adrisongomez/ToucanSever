@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon bin/dev",
     "sandbox": "nodemon sandbox_code.js",
     "test": "jest --runInBand --detectOpenHandles"
   },
@@ -27,10 +27,12 @@
     "faker": "^4.1.0",
     "mongoose": "^5.9.11",
     "mongoose-error-handler": "^1.1.0",
+    "morgan": "^1.10.0",
     "node-mocks-http": "^1.8.1"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
+    "dotenv": "^8.2.0",
     "jest": "^26.0.1",
     "mongodb-memory-server": "^6.5.2",
     "nodemon": "^2.0.3"
