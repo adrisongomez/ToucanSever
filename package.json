@@ -12,6 +12,8 @@
     "node": "12.16.2"
   },
   "scripts": {
+    "client-dev": "node bin/dev",
+    "client": "next",
     "start": "node index.js",
     "dev": "nodemon bin/dev",
     "sandbox": "nodemon sandbox_code.js",
@@ -31,8 +33,10 @@
     "mongoose": "^5.9.11",
     "mongoose-error-handler": "^1.1.0",
     "morgan": "^1.10.0",
+    "next": "^9.4.4",
     "node-mocks-http": "^1.8.1",
-    "nodemon": "^2.0.4"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
