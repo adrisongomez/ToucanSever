@@ -32,7 +32,7 @@ exports.deleteCommentToPub = (Publication) => async (req, res, next) => {
 exports.updateCommentInPub = (Publication) => async (req, res, next) => {
   try {
     const idPublication = req.params.idPublication || "";
-    const idComment = req.params.idComment || "";
+    const idComment = req.params.idComment.trim() || "";
     const newComment = {
       comment: req.body.comment || "",
       author: req.body.author || undefined,

@@ -37,7 +37,7 @@ exports.updateComment = async (
     const publication = await Publication.findById(publicationId);
     const comment = publication.comments.id(commentId);
     if (!comment) throw { id: 1, message: "Comment not exists" };
-    if (comment.author !== commentNew.author) {
+    if (comment.author != commentNew.author) {
       throw { id: 1, message: "Not allowed, Author differents" };
     }
     comment.comment = commentNew.comment;

@@ -21,7 +21,6 @@ const {
 
 const User = require("../../models/user/user.model");
 const Publication = require("../../models/publication/publication.model");
-const { response } = require("express");
 
 const app = createTestApp();
 
