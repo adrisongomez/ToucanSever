@@ -16,8 +16,9 @@ exports.addComment = async (publicationId, comment, Publication) => {
 exports.deleteComment = async (commentId, publicationId, Publication) => {
   try {
     const publication = await Publication.findById(publicationId);
-    const comment = publication.comments.id(commentId).remove();
+    const comment = publication.comments.id(commentId);
     if (!comment) throw { id: 1, message: "Comment not exists" };
+    comment.remove();
     return await publication.save();
   } catch (error) {
     if (error.path === "_id") {

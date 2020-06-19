@@ -115,9 +115,7 @@ describe("deleteDocument", () => {
       findById: (_id) =>
         Promise.resolve({
           comments: {
-            id: () => ({
-              remove: () => null,
-            }),
+            id: () => null,
           },
         }),
     };
@@ -195,7 +193,7 @@ describe("updateComment", () => {
       findById: (_id) =>
         Promise.resolve({
           comments: {
-            id:()=>newComment,
+            id: () => newComment,
           },
         }),
     };
@@ -203,7 +201,7 @@ describe("updateComment", () => {
     const data = res._getJSONData();
     expect(res.statusCode).toBe(404);
     expect(data.id).toBe(1);
-    expect(data.message).toBe("Not allowed, Author differents")
+    expect(data.message).toBe("Not allowed, Author differents");
   });
 });
 

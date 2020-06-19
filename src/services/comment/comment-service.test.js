@@ -77,9 +77,7 @@ describe("deleteComment from a publication", () => {
       findById: () =>
         Promise.resolve({
           comments: {
-            id: (obj) => ({
-              remove: () => null,
-            }),
+            id: (obj) => null,
           },
         }),
     };
