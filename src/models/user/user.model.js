@@ -1,5 +1,7 @@
 const { model, Schema } = require("mongoose");
 
+const Album = require("../album/album.schema");
+
 const User = Schema({
   firstName: {
     type: String,
@@ -68,6 +70,7 @@ const User = Schema({
     type: [Schema.Types.ObjectId],
     ref: "Users",
   },
+  albums: [Album],
 });
 
 module.exports = model("user", User);

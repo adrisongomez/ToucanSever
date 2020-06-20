@@ -11,7 +11,18 @@ exports.mockUserData = () => ({
   address: faker.address.streetAddress(),
   followings: [],
   followers: [],
+  albums: [],
 });
+
+exports.mockResources = () => ({
+  type: faker.helpers.randomize(["video", "image"]),
+  url: faker.image.nature(),
+});
+
+exports.mockAlbum = () => ({
+  name: faker.name.jobDescriptor(),
+  resources: Array.from(Array(5), ()=>this.mockResources()),
+})
 
 exports.mockPublication = (id) => ({
   author: id,
