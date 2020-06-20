@@ -68,7 +68,9 @@ describe("Publication create", () => {
     });
 
     const res = httpMocks.createResponse();
-    const next = (obj) => {res.status(obj.status).json(obj.error)};
+    const next = (obj) => {
+      res.status(obj.status).json(obj.error);
+    };
 
     await createPublication(mockPublicationModel)(req, res, next);
     const { errors } = res._getJSONData();
@@ -124,102 +126,6 @@ describe("Publications delete", () => {
     expect(res.statusCode).toBe(404);
     expect(result.id).toBe(1);
     expect(result.message).toBe("Publication not exists");
-  });
-});
-
-describe("Publication add comments", () => {
-  const mockIdPu = "12312145621";
-  const mockPub = mockPublication("123456");
-  const comment = mockCommentsData("123123");
-
-  it("work correctly", async () => {
-    const mockModel = {
-      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
-      updateOne: (obj, updateObj) =>
-        Promise.resolve({ _id: obj._id, ...updateObj }),
-    };
-    const req = httpMocks.createRequest({
-      method: "POST",
-      url: "/api/publication",
-      body: {
-        ...comment,
-      },
-      params: {
-        idPublications: mockIdPu,
-      },
-    });
-    const res = httpMocks.createResponse();
-    const next = (obj) => {};
-    await addCommentToPublication(mockModel)(req, res, next);
-    const result = res._getJSONData();
-    expect(res.statusCode).toBe(201);
-    expect(result.comments.length).toBe(mockPub.comments.length);
-  });
-
-  it("work incorrectly, Empty comment and Author not valid", async () => {
-    const mockModel = {
-      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
-      updateOne: (obj, updateObj) =>
-        Promise.reject({
-          errors: {
-            "comments.0.author": {
-              message: "Author not valid",
-            },
-            "comments.0.comment": {
-              message: "Comment must not be empty",
-            },
-          },
-        }),
-    };
-    const req = httpMocks.createRequest({
-      method: "POST",
-      url: "/api/publication",
-      body: {
-        ...comment,
-      },
-      params: {
-        idPublications: mockIdPu,
-      },
-    });
-    const res = httpMocks.createResponse();
-    const next = (obj) => {
-      res.status(obj.status).json(obj.error);
-    };
-    await addCommentToPublication(mockModel)(req, res, next);
-    const { errors } = res._getJSONData();
-    expect(errors["comments.0.author"]).toBeDefined();
-    expect(res.statusCode).toBe(422);
-  });
-
-  it("work incorrectly, IdPub not valid", async () => {
-    const mockModel = {
-      findById: (_id) =>
-        Promise.reject({
-          errors: {
-            _id: {
-              message: "_Id not Valid",
-            },
-          },
-        }),
-    };
-    const req = httpMocks.createRequest({
-      method: "POST",
-      url: "/api/publication",
-      body: {
-        ...comment,
-      },
-      params: {
-        idPublications: mockIdPu,
-      },
-    });
-    const res = httpMocks.createResponse();
-    const next = (obj) => {
-      res.status(obj.status).json(obj.error);
-    };
-    await addCommentToPublication(mockModel)(req, res, next);
-    const { errors } = res._getJSONData();
-    expect(errors._id).toBeDefined();
-    expect(res.statusCode).toBe(422);
   });
 });
 

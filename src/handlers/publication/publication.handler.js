@@ -2,7 +2,6 @@ const {
   createPublicationDoc,
   deletePublicationDoc,
   updatePublicationDoc,
-  addCommentsToPublicationsDoc,
   getAllPublicationDoc,
   findByIdPublicationDoc,
   findByIdPublicationDocByUserId: findPublicationDocByUserId,
@@ -28,24 +27,6 @@ exports.deletePublications = (Publication) => async (req, res, next) => {
     res.status(200).json(result);
   } catch (err) {
     next({ status: 404, error:err });
-  }
-};
-
-exports.addCommentToPublication = (Publication) => async (req, res, next) => {
-  const idPub = req.params.idPublication;
-  const comment = {
-    comment: req.body.comment,
-    author: req.body.author,
-  };
-  try {
-    const result = await addCommentsToPublicationsDoc(
-      idPub,
-      comment,
-      Publication
-    );
-    res.status(201).json(result);
-  } catch (error) {
-    next({ status: 422, error });
   }
 };
 

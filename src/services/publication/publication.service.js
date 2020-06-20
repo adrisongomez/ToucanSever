@@ -13,18 +13,6 @@ exports.createPublicationDoc = (publicationData, Publication) => {
     });
 };
 
-exports.addCommentsToPublicationsDoc = async (idPub, comment, Publication) => {
-  try {
-    const publication = await Publication.findById(idPub);
-    publication.comments.push(comment);
-    await Publication.updateOne({ _id: idPub }, publication);
-    return publication;
-  } catch (err) {
-    if(err.path==="_id") throw {id: 1, message: "Publication not exists"}
-    const errors = mongooseError.set(err);
-    throw errors;
-  }
-};
 
 exports.updatePublicationDoc = async (
   idPublication,

@@ -12,7 +12,7 @@ RootRouter.get("/test", (req, res, next) => {
 });
 
 RootRouter.use("/user/", UserRoute);
-RootRouter.use("/publication/", PublicationRoute);
+RootRouter.use("/publication/", PublicationRoute); // Comments Router defined inside it
 
 RootRouter.use(unkwonRouteGenericHandler());
 RootRouter.use(errorRouteHandler());

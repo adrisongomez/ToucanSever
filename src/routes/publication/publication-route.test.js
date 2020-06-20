@@ -46,35 +46,22 @@ afterEach(async () => {
   await dropDatabase();
 });
 
-describe("Publication routes happy path", () => {
+const getPubAndUserDB = async () => {
   const user = mockUserData();
+  const userDB = await User.create(user);
+  const publication = mockPublication(userDB._id);
+  const publicationDB = await Publication.create(publication);
+  return { user: userDB, publication: publicationDB };
+};
 
-  const getPubAndUserDB = async () => {
-    const userDB = await User.create(user);
-    const publication = mockPublication(userDB._id);
-    const publicationDB = await Publication.create(publication);
-    return { user: userDB, publication: publicationDB };
-  };
-
+describe("Publication routes happy path", () => {
   test("Create a publication", async () => {
-    const userDB = await User.create(user);
-    const publication = mockPublication(userDB._id);
+    const { publication, user } = await getPubAndUserDB();
     const { status, data } = await axios.post(endpoint, publication);
     expect(status).toBe(201);
     expect(data.description).toBe(publication.description);
     expect(data.author.firstName).toBe(user.firstName);
     expect(data.author.lastName).toBe(user.lastName);
-  });
-
-  test("Add comment to a Publication", async () => {
-    const userDB = await User.create(user);
-    const publication = mockPublication(userDB._id);
-    const publicationDB = await Publication.create(publication);
-    const url = `${endpoint}/comment/${publicationDB._id}`;
-    const comment = mockCommentsData(publicationDB._id);
-    const { status, data } = await axios.post(url, comment);
-    expect(status).toBe(201);
-    expect(data.comments.length).toBe(publication.comments.length + 1);
   });
 
   test("Delete a Publication", async () => {
@@ -149,18 +136,6 @@ describe("Publication route bad path", () => {
     }
   });
 
-  test("Add a comment to a publication that doesn't exists", async () => {
-    const url = `${endpoint}/comment/${idPubNotExists}`;
-    const comment = mockCommentsData(idUserNotExists);
-    try {
-      await axios.post(url, comment);
-    } catch (error) {
-      const { status, data } = error.response;
-      expect(status).toBe(422);
-      expect(data.id).toBe(1);
-    }
-  });
-
   test("Delete a publication that doesn't exists", async () => {
     const url = `${endpoint}/${idPubNotExists}`;
     try {
@@ -215,4 +190,24 @@ describe("Publication route bad path", () => {
       expect(data.id).toBe(1);
     }
   });
+});
+
+test("Comments Route integrate well, POST addComment", async () => {
+  const { publication, user } = await getPubAndUserDB();
+  const comment = await mockCommentsData(user._id);
+  const url = `${endpoint}/comment/${publication._id}`;
+  const { data, status } = await axios.post(url, comment);
+  expect(status).toBe(201);
+  expect(data.comments).not.toBe(publication.comments);
+});
+
+test("Comment Route integrate well (bad path), POST addComment, Publication not exists", async () => {
+  const url = `${endpoint}/comment/1`;
+  try {
+    await axios.post(url, {});
+  } catch ({ response: { data, status } }) {
+    expect(status).toBe(422);
+    expect(data.id).toBe(1);
+    expect(data.message).toBe("Publication not exists");
+  }
 });

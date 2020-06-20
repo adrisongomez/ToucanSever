@@ -189,50 +189,6 @@ describe("Finds Publications by Followings and Followers ids", () => {
   });
 });
 
-describe("Add comments to Publications", () => {
-  const mockIdUser = "1235asdfasd";
-  const mockUser = mockUserData();
-  const mockPub = mockPublicationData(mockIdUser);
-  const mockIdPub = "1213216546561237";
-  const comment = mockCommentsData(mockIdUser);
-
-  it("work correctly", async () => {
-    const mockPublicationModel = {
-      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
-      updateOne: (id, obj) => Promise.resolve({ _id: id._id, ...obj }),
-    };
-    const result = await addCommentsToPublicationsDoc(
-      mockIdPub,
-      comment,
-      mockPublicationModel
-    );
-    expect(result.comments.length).toBe(mockPub.comments.length);
-  });
-
-  it("work incorrectly, Author not valid", async () => {
-    const mockPublicationModel = {
-      findById: (_id) => Promise.resolve({ _id, ...mockPub }),
-      updateOne: (id, obj) =>
-        Promise.reject({
-          errors: {
-            "comments.0.author": {
-              message: "Author not valid",
-            },
-          },
-        }),
-    };
-    try {
-      await addCommentsToPublicationsDoc(
-        mockIdPub,
-        comment,
-        mockPublicationModel
-      );
-    } catch ({ errors }) {
-      expect(errors["comments.0.author"]).toBe("Author not valid");
-    }
-  });
-});
-
 describe("Find publication by Publication Id", () => {
   const mockIdPub = "12312132121313213132";
   const mockPub = mockPublicationData();
