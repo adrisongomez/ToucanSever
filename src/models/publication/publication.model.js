@@ -2,7 +2,7 @@
 
 const { model, Schema } = require("mongoose");
 
-const Comment = require("./comment/comment.schema");
+const Comment = require("../comment/comment.schema");
 
 const Publication = new Schema({
   description: {
