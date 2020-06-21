@@ -1,4 +1,5 @@
 TODO: Create a CRUD for albums.
+TODO: Resolve Bug in Comment: doc.save() using it
 TODO: Implements UserCredential module, JWT and Passport Js.
 TODO: Start making prototype.
 
@@ -70,3 +71,6 @@ files:
 /routes/album
 /routes/resources
 /routes/resourcesRef
+
+
+Handlers put a forIn that catch error and put those error in a variable that it gonna be throw it.
