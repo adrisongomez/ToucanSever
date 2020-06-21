@@ -1,17 +1,17 @@
-const Publication = require("../publication.model");
-const User = require("../../user/user.model");
+const Publication = require("../publication/publication.model");
+const User = require("../user/user.model");
 
 const {
   connect,
   closeDatabase,
   dropDatabase,
-} = require("../../../__mocks__/db.testHelper");
+} = require("../../__mocks__/db.testHelper");
 
 const {
   mockCommentsData,
   mockPublication,
   mockUserData,
-} = require("../../../__mocks__/utils.testHelper");
+} = require("../../__mocks__/utils.testHelper");
 
 const getUserAndPub = async () => {
   const user = await User.create(mockUserData());
@@ -37,9 +37,12 @@ describe("Comment Model Works", () => {
   test("Create a comments", async () => {
     const { publication, comment } = await getUserAndPub();
     const newComment = await publication.comments.create(comment);
+    publication.comments.push(newComment);
+    await publication.save();
     expect(newComment._id).toBeDefined();
     expect(newComment.comment).toBe(comment.comment);
     expect(newComment.author).toStrictEqual(comment.author);
+    expect(publication.comments).toContain(newComment);
   });
 
   test("Delete a comment", async () => {
@@ -74,5 +77,4 @@ describe("Comment Model not works", () => {
       expect(error.path).toBe("author");
     }
   });
-  
 });
