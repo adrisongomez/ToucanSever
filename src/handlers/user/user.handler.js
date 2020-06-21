@@ -6,7 +6,7 @@ const {
   updateUserDoc,
   deleteUserDocById,
   toggleFollowToUserDoc,
-} = require("../../services/user/user.service");
+} = require("../../controller/user/user.controller");
 
 exports.createUser = (User) => (req, res, next) => {
   const userData = getUserFromRequest(req);

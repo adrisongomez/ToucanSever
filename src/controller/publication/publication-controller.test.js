@@ -6,7 +6,7 @@ const {
   addCommentsToPublicationsDoc,
   findByIdPublicationDoc,
   findByIdPublicationDocByUserId,
-} = require("./publication.service");
+} = require("./publication.controller");
 const {
   mockUserData,
   mockCommentsData,

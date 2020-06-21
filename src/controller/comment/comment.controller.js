@@ -1,7 +1,9 @@
 exports.addComment = async (publicationId, comment, Publication) => {
   try {
     const publication = await Publication.findById(publicationId);
-    return await publication.comments.create(comment);
+    const doc =  await publication.comments.create(comment);
+    publication.comments.push(doc);
+    return await publication.save();
   } catch (error) {
     if (error.path === "_id") {
       throw { id: 1, message: "Publication not exists" };

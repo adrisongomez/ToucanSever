@@ -2,7 +2,7 @@ const {
   addComment,
   deleteComment,
   updateComment,
-} = require("../../services/comment/comment.service");
+} = require("../../controller/comment/comment.controller");
 
 exports.addCommentToPub = (Publication) => async (req, res, next) => {
   const idPub = req.params.idPublication;

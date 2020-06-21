@@ -27,8 +27,10 @@ describe("addComment handlerbar", () => {
       findById: () =>
         Promise.resolve({
           comments: {
-            create: (obj) => Promise.resolve(publication),
+            create: (obj) => publication,
+            push: (obj) => null,
           },
+          save: () => Promise.resolve(publication),
         }),
     };
     const { res, next } = getResAndNext();

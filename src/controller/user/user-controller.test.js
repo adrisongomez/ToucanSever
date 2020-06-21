@@ -8,7 +8,7 @@ const {
   updateUserDoc,
   deleteUserDocById,
   toggleFollowToUserDoc,
-} = require("./user.service");
+} = require("./user.controller");
 
 const mockModel = {
   create: (obj) => Promise.resolve(obj),
@@ -99,13 +99,14 @@ describe("User services work", () => {
 });
 
 describe("When user services are not using correctly", () => {
-  test.skip("Creating User with some field undefined or not setting", (done) => {
+  test("Creating User with some field undefined or not setting", (done) => {
     const error = {
       errors: {
         email: {
           message: "Email must be unique and is required",
           value: undefined,
           reason: undefined,
+          path: "email",
         },
       },
     };
@@ -115,10 +116,8 @@ describe("When user services are not using correctly", () => {
     const mockUser = mockUserData();
     mockUser.email = undefined;
 
-    expect(createUserDoc(mockUser, mockModel)).rejects.toThrowError();
     createUserDoc(mockUser, mockModel).catch((err) => {
-      console.log(err);
-      expect(err.errors).toBeDefined();
+      expect(err.error).toBeDefined();
       done();
     });
   });
@@ -178,7 +177,12 @@ describe("Users add friends", () => {
     const idUser = "123456789456";
     const idFriend = "1234659878645131654";
     const mockModel = {
-      findById: (obj) => Promise.resolve({ _id: obj, ...mockUserData(), followings:[idFriend] }),
+      findById: (obj) =>
+        Promise.resolve({
+          _id: obj,
+          ...mockUserData(),
+          followings: [idFriend],
+        }),
       updateOne: (id, obj) => Promise.resolve({ _id: obj, ...obj }),
     };
     const { id, message } = await toggleFollowToUserDoc(

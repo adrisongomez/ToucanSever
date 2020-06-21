@@ -5,7 +5,7 @@ const {
   getAllPublicationDoc,
   findByIdPublicationDoc,
   findByIdPublicationDocByUserId: findPublicationDocByUserId,
-} = require("../../services/publication/publication.service");
+} = require("../../controller/publication/publication.controller");
 
 exports.createPublication = (Publication) => async (req, res, next) => {
   const publicationData = getPublicationDataFromReq(req);

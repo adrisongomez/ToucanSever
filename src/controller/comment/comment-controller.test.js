@@ -2,7 +2,7 @@ const {
   addComment,
   deleteComment,
   updateComment,
-} = require("./comment.service");
+} = require("./comment.controller");
 const {
   mockPublication,
   mockCommentsData,
@@ -19,8 +19,10 @@ describe("addComment to a publication", () => {
           _id,
           ...publication,
           comments: {
-            create: (obj) => Promise.resolve(publication),
+            create: (obj) => obj,
+            push: (obj) => null,
           },
+          save: () => Promise.resolve(publication),
         }),
     };
     const result = await addComment(1, comment, mockModel);
