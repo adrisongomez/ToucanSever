@@ -12,13 +12,13 @@ const User = Schema({
     type: String,
     required: [true, "The lastname is required"],
   },
+
   imgProfile: {
     type: String,
     validate: {
-      validator: (img) =>
-        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
-          img
-        ),
+      validator: new RegExp(
+        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+      ),
       message: "Profile Image is not valid",
     },
   },
@@ -27,10 +27,9 @@ const User = Schema({
     unique: true,
     required: [true, "Email is required"],
     validate: {
-      validator: (email) =>
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-          email
-        ),
+      validator: new RegExp(
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      ),
       message: "Email is not valid",
     },
   },
@@ -54,7 +53,7 @@ const User = Schema({
     type: String,
     required: [true, "Zipcode is required"],
     validate: {
-      validator: (zipCode) => /^\d{5}$|^\d{5}-\d{4}$/.test(zipCode),
+      validator: new RegExp(/^\d{5}$|^\d{5}-\d{4}$/),
       message: "ZipCode is not valid",
     },
   },
@@ -64,11 +63,11 @@ const User = Schema({
   },
   followings: {
     type: [Schema.Types.ObjectId],
-    ref: "Users",
+    ref: "user",
   },
   followers: {
     type: [Schema.Types.ObjectId],
-    ref: "Users",
+    ref: "user",
   },
   albums: [Album],
 });

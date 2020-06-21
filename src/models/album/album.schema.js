@@ -5,13 +5,10 @@ const Resource = require("../resources/resource.schema");
 const Album = new Schema({
   name: {
     type: String,
+    required: true,
   },
 
-  resources: [
-    {
-      type: Resource,
-    },
-  ],
+  resources: [Resource],
 });
 
 module.exports = Album;
