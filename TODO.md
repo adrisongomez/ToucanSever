@@ -41,9 +41,6 @@ Routes:
 
 TODos:
 
-    TODO: Create Schema and SubDocument 
-        Happy Path Tested
-        Bad Path Tested
     TODO: Create Services 
         Happy Path Tested
         Bad Path Tested
@@ -55,10 +52,6 @@ TODos:
         Bad Path Tested
 
 files:
-
-/models/resources
-/models/resourcesRef
-/models/album
 
 /services/resources
 /services/resourcesPub
@@ -74,3 +67,5 @@ files:
 
 
 Handlers put a forIn that catch error and put those error in a variable that it gonna be throw it.
+
+Create a Recursition Function that save to parent();

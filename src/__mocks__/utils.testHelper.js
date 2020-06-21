@@ -21,8 +21,8 @@ exports.mockResources = () => ({
 
 exports.mockAlbum = () => ({
   name: faker.name.jobDescriptor(),
-  resources: Array.from(Array(5), ()=>this.mockResources()),
-})
+  resources: Array.from(Array(5), () => this.mockResources()),
+});
 
 exports.mockPublication = (id) => ({
   author: id,
@@ -39,4 +39,10 @@ exports.mockPublication = (id) => ({
 exports.mockCommentsData = (id) => ({
   comment: faker.lorem.words(10),
   author: id,
+});
+
+exports.mockResourceRef = () => ({
+  resourceId: faker.random.uuid(),
+  parentId: faker.random.uuid(),
+  albumId: faker.random.uuid(),
 });
