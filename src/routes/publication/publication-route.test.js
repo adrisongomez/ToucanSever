@@ -64,6 +64,15 @@ describe("Publication routes happy path", () => {
     expect(data.author.lastName).toBe(user.lastName);
   });
 
+  test("Create a publication with resource", async () => {
+    const { publication, user } = await getPubAndUserDB();
+    const obj = await publication.toObject();
+    obj.album = user.albums[0];
+    const { status, data } = await axios.post(endpoint, obj);
+    expect(status).toBe(201);
+    expect(data.description).toBe(publication.description);
+  });
+
   test("Delete a Publication", async () => {
     const { publication } = await getPubAndUserDB();
     const url = `${endpoint}/${publication._id}`;

@@ -5,12 +5,25 @@ const {
   getAllPublicationDoc,
   findByIdPublicationDoc,
   findByIdPublicationDocByUserId: findPublicationDocByUserId,
+  addPublicationWithResource,
 } = require("../../controller/publication/publication.controller");
 
-exports.createPublication = (Publication) => async (req, res, next) => {
+exports.createPublication = (Publication, User) => async (req, res, next) => {
   const publicationData = getPublicationDataFromReq(req);
+  let albumData = undefined;
+  if (req.body.album) albumData = getAlbumData(req);
   try {
-    const response = await createPublicationDoc(publicationData, Publication);
+    let response;
+    if (albumData) {
+      response = await addPublicationWithResource(
+        publicationData,
+        albumData,
+        User,
+        Publication
+      );
+    } else {
+      response = await createPublicationDoc(publicationData, Publication);
+    }
     res.status(201).json(response);
   } catch (error) {
     next({
@@ -26,7 +39,7 @@ exports.deletePublications = (Publication) => async (req, res, next) => {
     const result = await deletePublicationDoc(idPub, Publication);
     res.status(200).json(result);
   } catch (err) {
-    next({ status: 404, error:err });
+    next({ status: 404, error: err });
   }
 };
 
@@ -79,4 +92,10 @@ const getPublicationDataFromReq = (req) => ({
   author: req.body.author || undefined,
   description: req.body.description || undefined,
   comments: req.body.comments || [],
+});
+
+const getAlbumData = (req) => ({
+  _id: req.body.album._id || undefined,
+  name: req.body.album.name || undefined,
+  resources: req.body.album.resources || undefined,
 });

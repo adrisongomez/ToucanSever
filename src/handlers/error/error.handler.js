@@ -9,5 +9,9 @@ exports.unkwonRouteGenericHandler = () => (req, res, next) => {
 };
 
 exports.errorRouteHandler = () => (err, req, res, next) => {
-  res.status(err.status || 400).json(err.error).end();
+  res
+    .status(err.status || 400)
+    .json(err.error)
+    .end();
+  throw err.error;
 };

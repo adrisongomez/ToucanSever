@@ -116,7 +116,7 @@ exports.addPublicationWithResource = async (
   Publication
 ) => {
   try {
-    const user = await User.findById(PublicationData.id);
+    const user = await User.findById(PublicationData.author);
     if (user.albums.id(AlbumData._id) === null) {
       const album = user.albums.create(AlbumData);
       user.albums.push(album);
