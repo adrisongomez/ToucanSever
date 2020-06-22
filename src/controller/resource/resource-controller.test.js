@@ -1,11 +1,17 @@
-const { getResource, deleteResource } = require("./resource.controller");
+const {
+  getResource,
+  deleteResource,
+  addResourceToAlbum,
+} = require("./resource.controller");
 
 const {
   mockResources,
   mockUserData,
+  mockAlbum,
 } = require("../../__mocks__/utils.testHelper");
 
 const resource = mockResources();
+const album = mockAlbum();
 const userData = mockUserData();
 const idParent = 1;
 const idAlbum = 1;
@@ -157,6 +163,104 @@ describe("deleteResource controller", () => {
     } catch (error) {
       expect(error.id).toBe(1);
       expect(error.message).toBe("Resource not exists");
+    }
+  });
+});
+
+describe("addResourceToAlbum controller", () => {
+  it("should work correctly", async () => {
+    const mockDoc = {
+      albums: {
+        id: (id) => ({
+          resources: {
+            create: (obj) => obj,
+            push: (obj) => {
+              album.resources.push(obj);
+              userData.albums.push(album);
+            },
+          },
+        }),
+      },
+      save: (obj) => Promise.resolve(userData),
+    };
+    const mockModel = {
+      findById: (id) => Promise.resolve(mockDoc),
+    };
+    const result = await addResourceToAlbum(
+      resource,
+      idAlbum,
+      idParent,
+      mockModel
+    );
+    expect(result.albums).toContain(album);
+    expect(album.resources).toContain(resource);
+  });
+
+  it("should not work correctly, Parent not exists", async () => {
+    const mockModel = {
+      findById: (id) => Promise.reject({ path: "_id" }),
+    };
+    try {
+      await addResourceToAlbum({}, idAlbum, idParent, mockModel);
+    } catch (error) {
+      expect(error.id).toBe(1);
+      expect(error.message).toBe("Parent not exists");
+    }
+  });
+  it("should not work correctly, Albums not exists", async () => {
+    const mockDoc = {
+      albums: {
+        id: (id) => null,
+      },
+    };
+    const mockModel = {
+      findById: (id) => Promise.resolve(mockDoc),
+    };
+    try {
+      await addResourceToAlbum({}, idAlbum, idParent, mockModel);
+    } catch (error) {
+      expect(error.id).toBe(1);
+      expect(error.message).toBe("Album not exists");
+    }
+  });
+
+  it("should not work correclty, Resource validation", async () => {
+    const mockDoc = {
+      albums: {
+        id: (id) => ({
+          resources: {
+            create: (obj) => obj,
+            push: (obj) => {
+              album.resources.push(obj);
+              userData.albums.push(album);
+            },
+          },
+        }),
+      },
+      save: () =>
+        Promise.reject({
+          errors: {
+            "albums.0.resources.0.type": {
+              message: "This types is not allowed",
+            },
+            "albums.0.resources.0.url": {
+              message: "Url not valid",
+            },
+          },
+        }),
+    };
+    const mockModel = {
+      findById: (id) => Promise.resolve(mockDoc),
+    };
+
+    try {
+      await addResourceToAlbum({}, idAlbum, idParent, mockModel);
+    } catch (error) {
+      expect(error.errors).toBeDefined();
+      expect(error.errors.type).toBe(
+        "This type is not allowed. ('video' or 'image')"
+      );
+      expect(error.errors.url).toBe("Url not valid");
     }
   });
 });
