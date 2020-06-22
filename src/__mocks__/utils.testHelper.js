@@ -11,7 +11,7 @@ exports.mockUserData = () => ({
   address: faker.address.streetAddress(),
   followings: [],
   followers: [],
-  albums: [],
+  albums: Array.from(Array(2), () => this.mockAlbum()),
 });
 
 exports.mockResources = () => ({
@@ -20,7 +20,7 @@ exports.mockResources = () => ({
 });
 
 exports.mockAlbum = () => ({
-  name: faker.name.jobDescriptor(),
+  name: faker.random.uuid(),
   resources: Array.from(Array(5), () => this.mockResources()),
 });
 

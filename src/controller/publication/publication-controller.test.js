@@ -3,21 +3,22 @@ const {
   updatePublicationDoc,
   deletePublicationDoc,
   getAllPublicationDoc: findPublicationDoc,
-  addCommentsToPublicationsDoc,
   findByIdPublicationDoc,
   findByIdPublicationDocByUserId,
+  addPublicationWithResourceToAlbum,
+  addPublicationWithResource,
 } = require("./publication.controller");
 const {
   mockUserData,
-  mockCommentsData,
   mockPublication: mockPublicationData,
+  mockResources,
+  mockAlbum,
 } = require("../../__mocks__/utils.testHelper");
 
 const idAuthorValid = "123456789";
 const idPublication = "1112333456";
 const publication = mockPublicationData(idAuthorValid);
 const idAuthorNotValid = "1234657897897899879";
-const publicationInvalid = mockPublicationData(idAuthorNotValid);
 const newData = mockPublicationData(idAuthorValid);
 
 describe("User services create", () => {
@@ -235,6 +236,82 @@ describe("Find publication by User Id", () => {
     } catch (error) {
       expect(error.id).toBe(1);
       expect(error.message).toBe("User Id not exists");
+    }
+  });
+});
+
+describe("addPublicationWithReource controller", () => {
+  const getModelCorrect = () => {
+    const album = mockAlbum();
+    const user = mockUserData();
+    user.albums[0].name = "Publication";
+    const mockUserDoc = {
+      albums: {
+        create: (album) => album,
+        push: (album) => {
+          user.albums.push(album);
+        },
+        id: (id) => album,
+      },
+      save: () => Promise.resolve(user),
+    };
+    const mockUserModel = {
+      findById: (id) => Promise.resolve(mockUserDoc),
+    };
+    const mockPublicationModel = {
+      create: (obj) => Promise.resolve(obj),
+    };
+    return { mockUserDoc, mockUserModel, user, album, mockPublicationModel };
+  };
+
+  it("should work correctly, from new album", async () => {
+    const {
+      mockUserDoc,
+      mockUserModel,
+      mockPublicationModel,
+      user,
+    } = getModelCorrect();
+    mockUserDoc.albums.id = (id) => null;
+    const resource = mockResources();
+    const album = {
+      _id: 1,
+      name: "Mi dia con fulano",
+      resources: [resource],
+    };
+    const publication = mockPublicationData(1);
+    const result = await addPublicationWithResource(
+      publication,
+      album,
+      mockUserModel,
+      mockPublicationModel
+    );
+    expect(result.description).toBeTruthy();
+    expect(result.resources).toContain(resource);
+    expect(user.albums).toContain(album);
+  });
+
+  it("should work correctly, from existing album", async () => {
+    const { mockUserModel, mockPublicationModel, album } = getModelCorrect();
+    const publication = mockPublicationData(1);
+    const result = await addPublicationWithResource(
+      publication,
+      album,
+      mockUserModel,
+      mockPublicationModel
+    );
+    expect(result.description).toBe(publication.description);
+    expect(result.resources).toBeDefined();
+  });
+
+  it("should not work correctly, Author not exists ", async () => {
+    const mockUserModel = {
+      findById: () => Promise.reject({ path: "_id" }),
+    };
+    try {
+      await addPublicationWithResource({}, {}, mockUserModel, {});
+    } catch (error) {
+      expect(error.id).toBe(1);
+      expect(error.message).toBeDefined();
     }
   });
 });

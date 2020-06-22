@@ -54,7 +54,7 @@ describe("Album SubDocument create ", () => {
       await result.parent().save();
       expect(0).toBe(1); // Make sure that expect it's gonna run;
     } catch (error) {
-      expect(error.errors["albums.1.name"]).toBeDefined();
+      expect(error.errors["albums.3.name"]).toBeDefined();
     }
   });
 });
@@ -92,7 +92,7 @@ describe("Album SudDocument update", () => {
       await album.parent().save();
       throw "algo paso";
     } catch (error) {
-      expect(error.errors[`albums.${length-1}.name`]).toBeDefined();
+      expect(error.errors[`albums.0.name`]).toBeDefined();
     }
   });
 });

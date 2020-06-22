@@ -59,12 +59,17 @@ exports.deleteUserDocById = (userId, UserModel) => {
 exports.toggleFollowToUserDoc = async (userId, friendId, UserModel) => {
   const user = await UserModel.findById(userId);
   const friend = await UserModel.findById(friendId);
-  const hasFriend = friend => !!user.followings.find(following => following === friend._id)
-  
+  const hasFriend = (friend) =>
+    !!user.followings.find((following) => following === friend._id);
+
   //Unfollow
-  if(hasFriend(friend)){
-    user.followings = user.followings.map(following => following !==friend.id);
-    friend.followings = user.followings.map(following => following !==friend.id);
+  if (hasFriend(friend)) {
+    user.followings = user.followings.map(
+      (following) => following !== friend.id
+    );
+    friend.followings = user.followings.map(
+      (following) => following !== friend.id
+    );
     await UserModel.updateOne(userId, user);
     await UserModel.updateOne(friendId, friend);
     return { id: 1, message: "You are unfollowing!" };
@@ -72,8 +77,8 @@ exports.toggleFollowToUserDoc = async (userId, friendId, UserModel) => {
 
   user.followings.push(friend._id);
   friend.followers.push(user._id);
-  await UserModel.updateOne({_id: userId}, user);
-  await UserModel.updateOne({_id: friendId}, friend);
+  await UserModel.updateOne({ _id: userId }, user);
+  await UserModel.updateOne({ _id: friendId }, friend);
   return { id: 0, message: "You are following!" };
 };
 

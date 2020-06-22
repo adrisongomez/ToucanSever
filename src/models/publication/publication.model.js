@@ -3,6 +3,7 @@
 const { model, Schema } = require("mongoose");
 
 const Comment = require("../comment/comment.schema");
+const Resource = require("../resources/resource.schema");
 
 const Publication = new Schema({
   description: {
@@ -15,13 +16,8 @@ const Publication = new Schema({
     ref: "user",
     required: [true, "Author is required"],
   },
-  comments: {
-    type: [
-      {
-        type: Comment,
-      },
-    ],
-  },
+  comments: [Comment],
+  resources: [Resource],
 });
 
 module.exports = model("publication", Publication);

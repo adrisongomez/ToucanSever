@@ -17,18 +17,7 @@ const UserRoute = require("./user.route");
 
 const app = createTestApp();
 
-const mockUserData = () => ({
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.exampleEmail(),
-  country: faker.address.country(),
-  city: faker.address.city(),
-  state: faker.address.state(),
-  zipCode: faker.address.zipCode(),
-  address: faker.address.streetAddress(),
-  followings: [],
-  followers: [],
-});
+const { mockUserData } = require("../../__mocks__/utils.testHelper");
 
 app.use("/", UserRoute);
 
@@ -63,12 +52,8 @@ describe("User routes are using correctly", () => {
 
   test("Find a user id", async (done) => {
     const mockUser1 = mockUserData();
-    const mockUser2 = mockUserData();
     const user1 = await axios
       .post(endpoint, mockUser1)
-      .then((resp) => resp.data.user);
-    const user2 = await axios
-      .post(endpoint, mockUser2)
       .then((resp) => resp.data.user);
     const response = await axios
       .get(`${endpoint}/${user1._id}`)
@@ -88,11 +73,15 @@ describe("User routes are using correctly", () => {
         expect(resp.status).toBe(200);
         expect(data.length).toBe(5);
         done();
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        done();
       });
   });
 
   test("Get a user list with sending pagination opcions", (done) => {
-    const listMockUser = Array.from(Array(50), (done) => mockUserData());
+    const listMockUser = Array.from(Array(50), () => mockUserData());
     const sendAllUser = (mockUser) =>
       axios.post(endpoint, mockUser).then((response) => response.data.user);
     return Promise.all(listMockUser.map(sendAllUser))
@@ -102,6 +91,10 @@ describe("User routes are using correctly", () => {
         expect(resp.status).toBe(200);
         expect(data.page).toBe(4);
         expect(data.results.length).toBe(10);
+        done();
+      })
+      .catch((error) => {
+        console.log(error.response.data);
         done();
       });
   });
@@ -143,18 +136,22 @@ describe("User routes are using correctly", () => {
   test("Follow a user by Id User", async () => {
     const mockUser = mockUserData();
     const mockUser2 = mockUserData();
-    const getUserData = async (mockUser) => {
-      const resp = await axios.post(endpoint, mockUser);
-      return resp.data.user;
-    };
-    const user = await getUserData(mockUser);
-    const anotherUser = await getUserData(mockUser2);
-    const response = await axios.post(`${endpoint}/follow`, {
-      userId: user._id,
-      anotherUserId: anotherUser._id,
-    });
-    const responseJson = response.data;
-    expect(responseJson.id).toBe(0);
+    try {
+      const getUserData = async (mockUser) => {
+        const resp = await axios.post(endpoint, mockUser);
+        return resp.data.user;
+      };
+      const user = await getUserData(mockUser);
+      const anotherUser = await getUserData(mockUser2);
+      const response = await axios.post(`${endpoint}/follow`, {
+        userId: user._id,
+        anotherUserId: anotherUser._id,
+      });
+      const responseJson = response.data;
+      expect(responseJson.id).toBe(0);
+    } catch (error) {
+      console.log(error.response.data);
+    }
   });
 });
 

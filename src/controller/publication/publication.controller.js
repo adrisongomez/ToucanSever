@@ -13,7 +13,6 @@ exports.createPublicationDoc = (publicationData, Publication) => {
     });
 };
 
-
 exports.updatePublicationDoc = async (
   idPublication,
   publicationNewData,
@@ -105,6 +104,33 @@ exports.findByIdPublicationDocByUserId = async (idUser, Publication) => {
   } catch (error) {
     if (error.path === "author") {
       throw { id: 1, message: "User Id not exists" };
+    }
+    throw error;
+  }
+};
+
+exports.addPublicationWithResource = async (
+  PublicationData,
+  AlbumData,
+  User,
+  Publication
+) => {
+  try {
+    const user = await User.findById(PublicationData.id);
+    if (user.albums.id(AlbumData._id) === null) {
+      const album = user.albums.create(AlbumData);
+      user.albums.push(album);
+      await user.save();
+    }
+    PublicationData.resources = AlbumData.resources;
+    return await Publication.create(PublicationData);
+  } catch (error) {
+    if (error.path === "_id") {
+      throw { id: 1, message: "Author not exists" };
+    }
+    if (error.errors) {
+      const errors = mongooseError.set(err);
+      throw errors;
     }
     throw error;
   }

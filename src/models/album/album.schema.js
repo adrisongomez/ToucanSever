@@ -7,7 +7,6 @@ const Album = new Schema({
     type: String,
     required: true,
   },
-
   resources: [Resource],
 });
 
