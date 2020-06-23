@@ -36,7 +36,7 @@ UserRoute.delete("/:idParent/album/:idAlbum", deleteAlbumFromUser(User));
 
 //  Resource Routes
 
-UserRoute.post("/:idParent/album/:idAlbum", addResourceToAlbum(User));
+UserRoute.post("/:idParent/album/:idAlbum/resource/", addResourceToAlbum(User));
 UserRoute.get("/:idParent/album/:idAlbum/resource/:idResource", getResourceFromAlbum(User));
 UserRoute.delete("/:idParent/album/:idAlbum/resource/:idResource", deleteResourceFromAlbum(User));
 

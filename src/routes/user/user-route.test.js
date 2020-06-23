@@ -18,7 +18,11 @@ const UserRoute = require("./user.route");
 
 const app = createTestApp();
 
-const { mockUserData, mockAlbum } = require("../../__mocks__/utils.testHelper");
+const {
+  mockUserData,
+  mockAlbum,
+  mockResources,
+} = require("../../__mocks__/utils.testHelper");
 
 app.use("/", UserRoute);
 
@@ -231,6 +235,39 @@ describe("Album Route Integrated", () => {
     const url = `${endpoint}/${user._id}/album/${album._id}`;
     const { data, status } = await axios.get(url);
     expect(data.name).toBe(album.name);
+    expect(status).toBe(200);
+  });
+});
+
+describe("Resource Route Integrated", () => {
+  test("addResource /:idUser/album/:idAlbum/resource/ POST", async () => {
+    const userData = mockUserData();
+    const user = await User.create(userData);
+    const album = user.albums[0];
+    const resource = mockResources();
+    const url = `${endpoint}/${user._id}/album/${album._id}/resource`;
+    const { data, status } = await axios.post(url, resource);
+    expect(status).toBe(201);
+  });
+
+  test("getResource /:idUser/album/:idAlbum/resource/:idResource", async () => {
+    const userData = mockUserData();
+    const user = await User.create(userData);
+    const album = user.albums[0];
+    const resource = album.resources[0];
+    const url = `${endpoint}/${user._id}/album/${album._id}/resource/${resource._id}`;
+    const { data, status } = await axios.get(url);
+    expect(status).toBe(200);
+    expect(data.url).toBe(resource.url);
+  });
+
+  test("deleteResource /:idUser/album/:idAlbum/resource/:idResource", async () => {
+    const userData = mockUserData();
+    const user = await User.create(userData);
+    const album = user.albums[0];
+    const resource = album.resources[0];
+    const url = `${endpoint}/${user._id}/album/${album._id}/resource/${resource._id}`;
+    const { status } = await axios.get(url);
     expect(status).toBe(200);
   });
 });
