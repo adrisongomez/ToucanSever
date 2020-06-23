@@ -1,7 +1,7 @@
 const {
   getResource,
   deleteResource,
-  addResourceToAlbum,
+  addResource: addResourceToAlbum,
 } = require("./resource.controller");
 
 const {

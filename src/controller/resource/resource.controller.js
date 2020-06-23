@@ -1,9 +1,4 @@
-exports.addResourceToAlbum = async (
-  resourceData,
-  idAlbum,
-  idParent,
-  Parent
-) => {
+exports.addResource = async (resourceData, idAlbum, idParent, Parent) => {
   try {
     const parentDoc = await Parent.findById(idParent);
     const albums = parentDoc.albums.id(idAlbum);

@@ -42,7 +42,6 @@ TODos:
 
 
 /handlers/resources
-/handlers/album
 
 /routes/album
 /routes/resources
