@@ -1,6 +1,7 @@
 const faker = require("faker");
 const axios = require("axios").default;
 const endpoint = "http://localhost:8000";
+const User = require("../../models/user/user.model");
 
 const {
   createTestApp,
@@ -17,7 +18,7 @@ const UserRoute = require("./user.route");
 
 const app = createTestApp();
 
-const { mockUserData } = require("../../__mocks__/utils.testHelper");
+const { mockUserData, mockAlbum } = require("../../__mocks__/utils.testHelper");
 
 app.use("/", UserRoute);
 
@@ -199,5 +200,37 @@ describe("Users routes are using incorrectly", () => {
       expect(err.response.status).toBe(404);
       done();
     });
+  });
+});
+
+describe("Album Route Integrated", () => {
+  test("addAlbumToUser /:idUser/album/ POST", async () => {
+    const userData = mockUserData();
+    const user = await User.create(userData);
+    const album = mockAlbum();
+    const url = `${endpoint}/${user._id}/album/`;
+    const { data } = await axios.post(url, album);
+    expect(data.albums).not.toBe(user.albums);
+    expect(data.albums.length).toBe(user.albums.length + 1);
+  });
+
+  test("deleteAbumFromUser /:idUser/album/:idAlbum DELETE", async () => {
+    const userData = mockUserData();
+    const user = await User.create(userData);
+    const album = user.albums[0];
+    const url = `${endpoint}/${user._id}/album/${album._id}`;
+    const { data, status } = await axios.delete(url);
+    expect(status).toBe(200);
+    expect(data.albums).not.toContain(album);
+  });
+
+  test("getAlbumFromUser /idUser/album/:idAlbum GET", async () => {
+    const userData = mockUserData();
+    const user = await User.create(userData);
+    const album = user.albums[0];
+    const url = `${endpoint}/${user._id}/album/${album._id}`;
+    const { data, status } = await axios.get(url);
+    expect(data.name).toBe(album.name);
+    expect(status).toBe(200);
   });
 });
