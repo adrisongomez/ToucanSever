@@ -21,8 +21,8 @@ exports.addResourceToAlbum = (User) => async (req, res, next) => {
   const idParent = req.params.idParent;
   const idAlbum = req.params.idAlbum;
   const resource = {
-    type: req.body.type || undefined,
-    url: req.body.url || undefined,
+    type: req.body.type,
+    url: req.body.url,
   };
   try {
     const result = await addResource(resource, idAlbum, idParent, User);
