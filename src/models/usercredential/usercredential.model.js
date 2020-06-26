@@ -6,7 +6,7 @@ const UserCredential = new Schema({
   username: {
     type: String,
     match: [
-      new RegExp(/^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/),
+      new RegExp(/^(?!.*__.*)(?!.*\.\..*)[a-z0-9_.]+$/iu),
       "The username is not valid",
     ],
     required: true,
@@ -22,11 +22,20 @@ const UserCredential = new Schema({
     type: Schema.Types.ObjectId,
     rel: "user",
     required: true,
+    unique: true,
   },
 });
 
-UserCredential.static("isUser", async function ({ username, password }) {
-  const userBd = this.findOne({ username: username });
+/**
+ * @function
+ * @name {isValidUser}
+ * @param credential {Username, Password}
+ *
+ * This static function is used to verify is a credential is valid,
+ */
+
+UserCredential.static("isValidUser", async function ({ username, password }) {
+  const userBd = await this.findOne({ username: username });
   if (!userBd) return false;
   const samePassword = await compare(password, userBd.password);
   if (!samePassword) return false;
