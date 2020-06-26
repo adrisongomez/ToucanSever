@@ -1,5 +1,5 @@
 const User = require("../user/user.model");
-const UserCredential = require("./usercredential.model");
+const UserCredential = require("./credential.model");
 const { compareSync } = require("bcrypt");
 const {
   dropDatabase,
