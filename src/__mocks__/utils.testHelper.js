@@ -46,3 +46,8 @@ exports.mockResourceRef = () => ({
   parentId: faker.random.uuid(),
   albumId: faker.random.uuid(),
 });
+
+exports.mockUserCredentialData = function () {
+  this.username = faker.internet.userName();
+  this.password = faker.internet.password(8);
+};
