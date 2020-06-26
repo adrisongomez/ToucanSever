@@ -92,6 +92,25 @@ describe("Create UserCrendetial", () => {
       expect(error.errors.user).toBeDefined();
     }
   });
+
+  it("should not work coorrectly, User has two credential", async () => {
+    const { user, userCredentialData } = await Stuff();
+    const credential = new mockUserCredentialData();
+    const doc = {
+      user: user._id,
+      ...userCredentialData,
+    };
+    const doc1 = {
+      user: user._id,
+      ...credential,
+    };
+    try {
+      await UserCredential.create(doc);
+      await UserCredential.create(doc);
+    } catch (error) {
+      expect(error.code).toBe(11000);
+    }
+  });
 });
 
 describe("isValidUser method", () => {
@@ -102,7 +121,7 @@ describe("isValidUser method", () => {
       ...userCredentialData,
     };
     await UserCredential.create(doc);
-    const resp = await UserCredential.isValidUser({
+    const resp = await UserCredential.isValid({
       username: userCredentialData.username,
       password: userCredentialData.password,
     });
@@ -116,7 +135,7 @@ describe("isValidUser method", () => {
       ...userCredentialData,
     };
     await UserCredential.create(doc);
-    const resp = await UserCredential.isValidUser({
+    const resp = await UserCredential.isValid({
       username: userCredentialData.username,
       password: passwordNotValid,
     });
@@ -130,7 +149,7 @@ describe("isValidUser method", () => {
       ...userCredentialData,
     };
     await UserCredential.create(doc);
-    const resp = await UserCredential.isValidUser({
+    const resp = await UserCredential.isValid({
       username: usernameNotValid,
       password: userCredentialData.password,
     });

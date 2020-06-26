@@ -34,7 +34,7 @@ const UserCredential = new Schema({
  * This static function is used to verify is a credential is valid,
  */
 
-UserCredential.static("isValidUser", async function ({ username, password }) {
+UserCredential.static("isValid", async function ({ username, password }) {
   const userBd = await this.findOne({ username: username });
   if (!userBd) return false;
   const samePassword = await compare(password, userBd.password);
