@@ -23,19 +23,26 @@ const mockUserData = () => ({
 });
 
 describe("User handlers are working correctly", () => {
-  test("Create a user", () => {
+  test("Create a user", async () => {
     const mockModel = {
       create: jest.fn((obj) => Promise.resolve({ _id: 123456789, ...obj })),
     };
+    const mockCredential = {
+      create: () => true,
+    }
+    const user = mockUserData();
     const request = httpMocks.createRequest({
       method: "GET",
-      body: mockUserData(),
+      body: user,
       url: "/api/user",
     });
     const response = httpMocks.createResponse();
-    createUser(mockModel)(request, response);
-    expect(mockModel.create).toHaveBeenCalled();
-    expect(response.statusCode).toBe(200);
+    const next = ({ status, error }) => {
+      response.status(status).json(error);
+    };
+    await createUser(mockModel, mockCredential)(request, response, next);
+    expect(response._getJSONData()._id).toBeDefined();
+    expect(response.statusCode).toBe(201);
   });
 
   test("Find a user by id", () => {
