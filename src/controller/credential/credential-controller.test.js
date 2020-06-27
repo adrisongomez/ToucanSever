@@ -7,7 +7,7 @@ const {
   loginCredential,
   loginEmail,
 } = require("./credential.controller");
-const { hashSync, compare } = require("bcrypt");
+const { hashSync } = require("bcrypt");
 
 const { username, password } = new mockUserCredentialData();
 const _id = "1231323465654";
