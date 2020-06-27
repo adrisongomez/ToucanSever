@@ -22,6 +22,7 @@ const {
   mockUserData,
   mockAlbum,
   mockResources,
+  mockUserCredentialData,
 } = require("../../__mocks__/utils.testHelper");
 
 app.use("/", UserRoute);
@@ -44,33 +45,40 @@ afterAll(async () => {
 describe("User routes are using correctly", () => {
   test("Create a user", (done) => {
     const mockUser = mockUserData();
-    return axios.post(endpoint, mockUser).then((resp) => {
-      const data = resp.data.user;
-      expect(resp.status).toBe(201);
-      expect(data.firstName).toBe(mockUser.firstName);
-      expect(data.lastName).toBe(mockUser.lastName);
-      expect(data.email).toBe(mockUser.email);
-      expect(data.createdAt).toBeDefined();
-      done();
-    });
+    return axios
+      .post(endpoint, {
+        ...mockUser,
+        ...new mockUserCredentialData(),
+      })
+      .then((resp) => {
+        const data = resp.data;
+        expect(resp.status).toBe(201);
+        expect(data.firstName).toBe(mockUser.firstName);
+        expect(data.lastName).toBe(mockUser.lastName);
+        expect(data.email).toBe(mockUser.email);
+        expect(data.createdAt).toBeDefined();
+        done();
+      });
   });
 
-  test("Find a user id", async (done) => {
+  test("Find a user id", async () => {
     const mockUser1 = mockUserData();
-    const user1 = await axios
-      .post(endpoint, mockUser1)
-      .then((resp) => resp.data.user);
-    const response = await axios
-      .get(`${endpoint}/${user1._id}`)
-      .then((resp) => resp.data);
-    expect(response._id).toBe(user1._id);
-    done();
+    const {
+      data: { _id },
+    } = await axios.post(endpoint, {
+      ...mockUser1,
+      ...new mockUserCredentialData(),
+    });
+    const { data } = await axios.get(`${endpoint}/${_id}`);
+    expect(data._id).toBe(data._id);
   });
 
   test("Get a user list without sending pagination details", (done) => {
     const listMockUser = Array.from(Array(5), () => mockUserData());
     const sendAllUser = (mockUser) =>
-      axios.post(endpoint, mockUser).then((response) => response.data.user);
+      axios
+        .post(endpoint, { ...mockUser, ...new mockUserCredentialData() })
+        .then((response) => response.data.user);
     return Promise.all(listMockUser.map(sendAllUser))
       .then(() => axios.get(endpoint))
       .then((resp) => {
@@ -78,39 +86,26 @@ describe("User routes are using correctly", () => {
         expect(resp.status).toBe(200);
         expect(data.length).toBe(5);
         done();
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-        done();
       });
   });
 
-  test("Get a user list with sending pagination opcions", (done) => {
-    const listMockUser = Array.from(Array(50), () => mockUserData());
-    const sendAllUser = (mockUser) =>
-      axios.post(endpoint, mockUser).then((response) => response.data.user);
-    return Promise.all(listMockUser.map(sendAllUser))
-      .then(() => axios.get(`${endpoint}/?page=4&limit=10`))
-      .then((resp) => {
-        const data = resp.data;
-        expect(resp.status).toBe(200);
-        expect(data.page).toBe(4);
-        expect(data.results.length).toBe(10);
-        done();
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-        done();
-      });
+  test("Get a user list with sending pagination opcions", async () => {
+    await Promise.all(
+      Array.from(Array(50), async () => await User.create(mockUserData()))
+    );
+    const { data, status } = await axios.get(`${endpoint}/?page=4&limit=10`);
+    expect(status).toBe(200);
+    expect(data.page).toBe(4);
+    expect(data.results.length).toBe(10);
   });
 
   test("Update a user data", (done) => {
     const mockUser = mockUserData();
     let idCreated;
     return axios
-      .post(endpoint, mockUser)
+      .post(endpoint, { ...mockUser, ...new mockUserCredentialData() })
       .then((resp) => {
-        const userCreated = resp.data.user;
+        const userCreated = resp.data;
         idCreated = userCreated._id;
         userCreated.firstName = "John";
         userCreated.lastName = "Oregon";
@@ -127,9 +122,9 @@ describe("User routes are using correctly", () => {
   test("Delete a user by Id User", (done) => {
     const mockUser = mockUserData();
     return axios
-      .post(endpoint, mockUser)
+      .post(endpoint, { ...mockUser, ...new mockUserCredentialData() })
       .then((resp) => {
-        const idUser = resp.data.user._id;
+        const idUser = resp.data._id;
         return axios.delete(`${endpoint}/${idUser}`);
       })
       .then((resp) => {
@@ -141,22 +136,21 @@ describe("User routes are using correctly", () => {
   test("Follow a user by Id User", async () => {
     const mockUser = mockUserData();
     const mockUser2 = mockUserData();
-    try {
-      const getUserData = async (mockUser) => {
-        const resp = await axios.post(endpoint, mockUser);
-        return resp.data.user;
-      };
-      const user = await getUserData(mockUser);
-      const anotherUser = await getUserData(mockUser2);
-      const response = await axios.post(`${endpoint}/follow`, {
-        userId: user._id,
-        anotherUserId: anotherUser._id,
+    const getUserData = async (mockUser) => {
+      const resp = await axios.post(endpoint, {
+        ...new mockUserCredentialData(),
+        ...mockUser,
       });
-      const responseJson = response.data;
-      expect(responseJson.id).toBe(0);
-    } catch (error) {
-      console.log(error.response.data);
-    }
+      return resp.data;
+    };
+    const user = await getUserData(mockUser);
+    const anotherUser = await getUserData(mockUser2);
+    const response = await axios.post(`${endpoint}/follow`, {
+      userId: user._id,
+      anotherUserId: anotherUser._id,
+    });
+    const responseJson = response.data;
+    expect(responseJson.id).toBe(0);
   });
 });
 
@@ -165,10 +159,12 @@ describe("Users routes are using incorrectly", () => {
     const mockUser = mockUserData();
     mockUser.firstName = undefined;
     mockUser.lastName = undefined;
-    return axios.post(endpoint, mockUser).catch((error) => {
-      expect(error.response.status).toBe(422);
-      done();
-    });
+    return axios
+      .post(endpoint, { ...mockUser, ...new mockUserCredentialData() })
+      .catch((error) => {
+        expect(error.response.status).toBe(422);
+        done();
+      });
   });
 
   test("Create a two user with the same email address", (done) => {
@@ -176,8 +172,10 @@ describe("Users routes are using incorrectly", () => {
     const mockUser2 = mockUserData();
     mockUser1.email = mockUser2.email;
     return axios
-      .post(endpoint, mockUser1)
-      .then(() => axios.post(endpoint, mockUser2))
+      .post(endpoint, { ...mockUser1, ...new mockUserCredentialData() })
+      .then(() =>
+        axios.post(endpoint, { ...mockUser2, ...new mockUserCredentialData() })
+      )
       .catch(({ response }) => {
         expect(response.status).toBe(422);
         done();

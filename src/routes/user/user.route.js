@@ -1,6 +1,7 @@
 const express = require("express");
 const UserRoute = express.Router();
 const User = require("../../models/user/user.model");
+const Credential = require("../../models/credential/credential.model");
 
 const {
   findUsers,
@@ -23,7 +24,7 @@ const {
 
 UserRoute.get("/:id", findUserById(User));
 UserRoute.get("/", findUsers(User));
-UserRoute.post("/", createUser(User));
+UserRoute.post("/", createUser(User, Credential));
 UserRoute.put("/:id", updateUser(User));
 UserRoute.delete("/:id", deleteUser(User));
 UserRoute.post("/follow", toggleFollowUser(User));
@@ -37,8 +38,13 @@ UserRoute.delete("/:idParent/album/:idAlbum", deleteAlbumFromUser(User));
 //  Resource Routes
 
 UserRoute.post("/:idParent/album/:idAlbum/resource/", addResourceToAlbum(User));
-UserRoute.get("/:idParent/album/:idAlbum/resource/:idResource", getResourceFromAlbum(User));
-UserRoute.delete("/:idParent/album/:idAlbum/resource/:idResource", deleteResourceFromAlbum(User));
-
+UserRoute.get(
+  "/:idParent/album/:idAlbum/resource/:idResource",
+  getResourceFromAlbum(User)
+);
+UserRoute.delete(
+  "/:idParent/album/:idAlbum/resource/:idResource",
+  deleteResourceFromAlbum(User)
+);
 
 module.exports = UserRoute;

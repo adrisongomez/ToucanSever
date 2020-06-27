@@ -7,20 +7,21 @@ const {
   deleteUserDocById,
   toggleFollowToUserDoc,
 } = require("../../controller/user/user.controller");
+const {
+  createCredential,
+} = require("../../controller/credential/credential.controller");
 
-exports.createUser = (User) => (req, res, next) => {
+exports.createUser = (User, Credential) => async (req, res, next) => {
   const userData = getUserFromRequest(req);
-  createUserDoc(userData, User)
-    .then((userDoc) => {
-      res.status(201).json({
-        status: "1",
-        message: "The User was created successfully",
-        user: userDoc,
-      });
-    })
-    .catch((err) => {
-      next(err);
-    });
+  const username = req.body.username;
+  const password = req.body.password;
+  try {
+    const user = await createUserDoc(userData, User);
+    await createCredential(username, password, user._id, Credential);
+    res.status(201).json(user);
+  } catch (err) {
+    next({ status: err.status, error: err.errors });
+  }
 };
 
 exports.findUserById = (User) => (req, res, next) => {
