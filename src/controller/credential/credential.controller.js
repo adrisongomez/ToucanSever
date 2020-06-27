@@ -2,7 +2,8 @@ const { findOne } = require("../../models/user/user.model");
 
 exports.createCredential = async (username, password, idUser, Credential) => {
   try {
-    return await Credential.create({ username, password, user: idUser });
+    await Credential.create({ username, password, user: idUser });
+    return { status: "new", message: "User created" };
   } catch (error) {
     if (error.code === 11000)
       throw {
@@ -46,7 +47,7 @@ const userNotExist = () => ({
   message: "User not exists",
 });
 
-const loginResponse = (resp) =>
-  resp
-    ? { status: "ok", message: "User logged", tokken: "" }
-    : { status: "fail", message: "username or password are not valid" };
+const loginResponse = (resp) => {
+  if (resp) return { status: "ok", message: "User logged", tokken: "" };
+  else throw { status: "fail", message: "username or password are not valid" };
+};

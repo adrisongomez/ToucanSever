@@ -26,9 +26,7 @@ describe("createCredential controller", () => {
       idUser,
       mockModel
     );
-    expect(result._id).toBeDefined();
-    expect(result.username).toBe(username);
-    expect(compare(password, result.password)).toBeTruthy();
+    expect(result.status).toBe("new");
   });
   it("should not work correctly, validation Username or User unique credential", async () => {
     const mockModel = {
@@ -88,10 +86,13 @@ describe("loginCredential controller", () => {
     const mockModel = {
       isValid: (obj) => Promise.resolve(false),
     };
-    const resp = await loginCredential(username, password, mockModel);
-    expect(resp.status).toBe("fail");
-    expect(resp.message).toBe("username or password are not valid");
-    expect(resp.tokken).not.toBeDefined();
+    try {
+      await loginCredential(username, password, mockModel);
+    } catch (error) {
+      expect(error.status).toBe("fail");
+      expect(error.message).toBe("username or password are not valid");
+      expect(error.tokken).not.toBeDefined();
+    }
   });
 });
 
