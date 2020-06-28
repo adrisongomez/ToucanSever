@@ -4,6 +4,7 @@ generateJWTfn = (secret, expiresIn) => ({ user, username }) =>
   !user || !username
     ? undefined
     : sign({ user, username }, secret, { expiresIn });
+
 isTokenFn = (secret) => (token) => {
   try {
     const { user, username } = verify(token, secret);

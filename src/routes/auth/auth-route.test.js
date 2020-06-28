@@ -1,18 +1,8 @@
 const axios = require("axios").default;
 
-const {
-  createTestApp,
-  addGenericRoute,
-} = require("../../__mocks__/app.testHelper");
-const {
-  connect,
-  dropDatabase,
-  closeDatabase,
-} = require("../../__mocks__/db.testHelper");
-const {
-  mockUserData,
-  mockUserCredentialData,
-} = require("../../__mocks__/utils.testHelper");
+const { createTestApp, addGenericRoute } = require("../../__mocks__/app.testHelper");
+const { connect, dropDatabase, closeDatabase } = require("../../__mocks__/db.testHelper");
+const { mockUserData, mockUserCredentialData } = require("../../__mocks__/utils.testHelper");
 
 //model
 
@@ -70,11 +60,13 @@ describe("Auth Login works", () => {
       credential,
       user: { email },
     } = await Stuff();
-    const { data, status } = await axios.post(url, {
+    const response = await axios.post(url, {
       email: email,
       password: credential.password,
     });
+    const { status, data, headers } = response;
     expect(status).toBe(200);
+    expect(headers["set-cookie"]).toBeDefined();
     expect(data.status).toBe("ok");
   });
 
