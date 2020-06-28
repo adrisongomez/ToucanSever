@@ -8,7 +8,7 @@ const { loginUserCrendential, refreshToken, logoutCredential } = require("../../
 const AuthRoute = Router();
 
 AuthRoute.post("/credential/login", loginUserCrendential(Credential, User));
-AuthRoute.post("/refresh", refreshToken(Credential));
+AuthRoute.get("/refresh", refreshToken(Credential));
 AuthRoute.delete("/credential/logout", logoutCredential());
 
 module.exports = AuthRoute;

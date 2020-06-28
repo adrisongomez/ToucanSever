@@ -56,7 +56,7 @@ const successfullyLogout = (username, res) =>
 
 const Unathorized = (res) => res.status(401).cookie("wtj", "").json({ status: "fail", message: "Unauthorized" });
 
-const successfullyLogin = ({ user, username, message = "ok", status = "Refreshed tokken" }, res) => {
+const successfullyLogin = ({ user, username, status = "ok", message = "Refreshed tokken" }, res) => {
   const accessToken = accessJWTGenerator({ username, user });
   const refreshToken = refreshJWTGenerator({ username, user });
   return res
