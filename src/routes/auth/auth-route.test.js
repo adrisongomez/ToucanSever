@@ -1,18 +1,9 @@
 const axios = require("axios").default;
 
-const {
-  createTestApp,
-  addGenericRoute,
-} = require("../../__mocks__/app.testHelper");
-const {
-  connect,
-  dropDatabase,
-  closeDatabase,
-} = require("../../__mocks__/db.testHelper");
-const {
-  mockUserData,
-  mockUserCredentialData,
-} = require("../../__mocks__/utils.testHelper");
+const { accessJWTGenerator, isAccessJWT, refreshJWTGenerator } = require("../../auth/generator/auth");
+const { createTestApp, addGenericRoute } = require("../../__mocks__/app.testHelper");
+const { connect, dropDatabase, closeDatabase } = require("../../__mocks__/db.testHelper");
+const { mockUserData, mockUserCredentialData } = require("../../__mocks__/utils.testHelper");
 
 //model
 
@@ -70,12 +61,15 @@ describe("Auth Login works", () => {
       credential,
       user: { email },
     } = await Stuff();
-    const { data, status } = await axios.post(url, {
+    const response = await axios.post(url, {
       email: email,
       password: credential.password,
     });
+    const { status, data, headers } = response;
     expect(status).toBe(200);
+    expect(headers["set-cookie"]).toBeDefined();
     expect(data.status).toBe("ok");
+    expect(isAccessJWT(data.accessToken));
   });
 
   test("/credential/login POST username or email not valid or empty", async () => {
@@ -102,6 +96,66 @@ describe("Auth Login works", () => {
       expect(status).toBe(403);
       expect(data.status).toBe("fail");
       expect(data.token).not.toBeDefined();
+    }
+  });
+});
+
+describe("Auth logout works", () => {
+  const url = `${endpoint}/credential/logout`;
+  it("/credential/logout DELETE works", async () => {
+    const {
+      credential,
+      user: { _id },
+    } = await Stuff();
+    const accessToken = accessJWTGenerator({ username: credential.username, user: _id });
+    const { data, status } = await axios.delete(url, { headers: { authorization: `Beare ${accessToken}` } });
+    expect(status).toBe(200);
+    expect(data.status).toBe("ok");
+  });
+
+  it("/credential/logout DELETE not work, not accessToken or invalid accessToken", async () => {
+    try {
+      await axios.delete(url);
+      expect(0).toBe(1);
+    } catch (error) {
+      const {
+        response: { data, status },
+      } = error;
+      expect(status).toBe(401);
+      expect(data.status).toBe("fail");
+    }
+  });
+});
+
+describe("Auth refershToken work", () => {
+  const url = `${endpoint}/refresh`;
+  test("/refresh GET works", async () => {
+    const {
+      credential,
+      user: { _id },
+    } = await Stuff();
+    const refreshToken = refreshJWTGenerator({ username: credential.username, user: _id });
+    const { data, status } = await axios.get(url, {
+      headers: {
+        Cookie: `wjt=${refreshToken};`,
+      },
+    });
+    expect(status).toBe(200);
+    expect(data.status).toBe("ok");
+    expect(isAccessJWT(data.accessToken)).toBeTruthy();
+  });
+
+  test("/refresh GET no work, refreshToken not valid or payload not valid", async () => {
+    try {
+      await axios.get(url, {
+        headers: {
+          Cookie: "wjt:NOT-VALID-TOKEN",
+        },
+      });
+    } catch (error) {
+      const { status, data } = error.response;
+      expect(status).toBe(401);
+      expect(data.status).toBe("fail");
     }
   });
 });

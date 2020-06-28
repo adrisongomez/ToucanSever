@@ -79,7 +79,6 @@ describe("loginCredential controller", () => {
     const resp = await loginCredential(username, password, mockModel);
     expect(resp.status).toBe("ok");
     expect(resp.message).toBe("User logged");
-    expect(resp.tokken).toBeDefined();
   });
 
   it("should not work correctly, isNotValid credential", async () => {
@@ -114,7 +113,6 @@ describe("loginEmail controller", () => {
     );
     expect(resp.status).toBe("ok");
     expect(resp.message).toBe("User logged");
-    expect(resp.tokken).toBeDefined();
   });
   it("should not work correctly, userNotExists", async () => {
     const mockModelUser = {

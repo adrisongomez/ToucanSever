@@ -31,7 +31,7 @@ exports.createCredential = async (username, password, idUser, Credential) => {
 
 exports.loginCredential = async (username, password, Credential) => {
   const resp = await Credential.isValid({ username, password });
-  return loginResponse(resp);
+  return loginResponse(resp, username);
 };
 
 exports.loginEmail = async (email, password, Credential, User) => {
@@ -47,7 +47,8 @@ const userNotExist = () => ({
   message: "User not exists",
 });
 
-const loginResponse = (resp) => {
-  if (resp) return { status: "ok", message: "User logged", tokken: "" };
+const loginResponse = (resp, username) => {
+  if (resp)
+    return { status: "ok", message: "User logged", user: resp, username };
   else throw { status: "fail", message: "username or password are not valid" };
 };

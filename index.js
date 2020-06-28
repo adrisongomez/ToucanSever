@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require("path");
-const morgan = require('morgan');
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 //Route Declaration
 const RootRoute = require("./src/routes/root.route");
@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 app.listen(port, (error) => {
   if (error) throw error;
