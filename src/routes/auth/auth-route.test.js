@@ -1,5 +1,6 @@
 const axios = require("axios").default;
 
+const { accessJWTGenerator } = require("../../auth/generator/auth");
 const { createTestApp, addGenericRoute } = require("../../__mocks__/app.testHelper");
 const { connect, dropDatabase, closeDatabase } = require("../../__mocks__/db.testHelper");
 const { mockUserData, mockUserCredentialData } = require("../../__mocks__/utils.testHelper");
@@ -94,6 +95,33 @@ describe("Auth Login works", () => {
       expect(status).toBe(403);
       expect(data.status).toBe("fail");
       expect(data.token).not.toBeDefined();
+    }
+  });
+});
+
+describe("Auth logout works", () => {
+  const url = `${endpoint}/credential/logout`;
+  it("/credential/logout POST works", async () => {
+    const {
+      credential,
+      user: { _id },
+    } = await Stuff();
+    const accessToken = accessJWTGenerator({ username: credential.username, user: _id });
+    const { data, status } = await axios.delete(url, { headers: { authorization: `Beare ${accessToken}` } });
+    expect(status).toBe(200);
+    expect(data.status).toBe("ok");
+  });
+
+  it("/credential/logout POST not work, not accessToken or invalid accessToken", async () => {
+    try {
+      await axios.delete(url);
+      expect(0).toBe(1);
+    } catch (error) {
+      const {
+        response: { data, status },
+      } = error;
+      expect(status).toBe(401);
+      expect(data.status).toBe("fail");
     }
   });
 });
