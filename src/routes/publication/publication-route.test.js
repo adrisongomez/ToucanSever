@@ -24,13 +24,13 @@ const Publication = require("../../models/publication/publication.model");
 
 const app = createTestApp();
 
-const endpoint = "http://localhost:3000";
+const endpoint = "http://localhost:7700";
 
 app.use("/", route);
 
 addGenericRoute(app);
 
-const server = app.listen(3000);
+const server = app.listen(7700);
 
 beforeAll(async () => {
   await connect();
