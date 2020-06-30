@@ -1,7 +1,5 @@
-TODO: Implements UserCredential module, JWT and Passport Js.
+TODO: Oauth Google Apis integrate
 TODO: Start making prototype.
+TODO: Securing Route and determine which are secure which are not...
 
---- Implements JWT:
-
-TODO: /refresh_token
-TODO: /logout
+--- Try to use puppeteer to test Google Provider Handler
