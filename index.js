@@ -18,14 +18,14 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.status(200).send("SERVER OF TOUCAN NETWORKS");
+});
+
+app.use("/api/", RootRoute);
+
 app.listen(port, (error) => {
   if (error) throw error;
   console.log("Server running on port " + port);
   const db = require("./src/models/db.connection");
 });
-
-app.get("/", (req, res) => {
-  res.status(200).send("hola");
-});
-
-app.use("/api/", RootRoute);
