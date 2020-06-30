@@ -5,13 +5,17 @@ exports.Client = () =>
   new google.auth.OAuth2({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    redirectUri: `${process.env.DOMAIN || "http://localhost:7700"}/api/auth/google/callback`,
+    redirectUri: `${process.env.DOMAIN || "http://localhost:7700"}/api/auth/provider/google/callback`,
   });
 
 exports.GoogleOauthService = () => google.oauth2("v2");
 
 exports.getUrlConsernGoogle = (client) => {
-  return client.generateAuthUrl();
+  const scope = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"];
+  return client.generateAuthUrl({
+    access_type: "offline",
+    scope,
+  });
 };
 
 exports.getUserDataFromGoogle = async (code, client, oauth) => {

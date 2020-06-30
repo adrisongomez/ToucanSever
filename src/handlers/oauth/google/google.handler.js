@@ -4,6 +4,7 @@ exports.googleRedirectHandler = (Client) => async (req, res, next) => {
   try {
     const client = Client();
     const url = getUrlConsernGoogle(client);
+    console.log(url);
     return res.redirect(url);
   } catch (error) {
     return next({
