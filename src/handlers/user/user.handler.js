@@ -1,15 +1,5 @@
-const {
-  createUserDoc,
-  findUserDocById,
-  findAllUserDocs,
-  findUserDocsPagination,
-  updateUserDoc,
-  deleteUserDocById,
-  toggleFollowToUserDoc,
-} = require("../../controller/user/user.controller");
-const {
-  createCredential,
-} = require("../../controller/credential/credential.controller");
+const { createUserDoc, findUserDocById, findAllUserDocs, findUserDocsPagination, updateUserDoc, deleteUserDocById, toggleFollowToUserDoc } = require("../../controller/user/user.controller");
+const { createCredential } = require("../../controller/credential/credential.controller");
 
 exports.createUser = (User, Credential) => async (req, res, next) => {
   const userData = getUserFromRequest(req);
@@ -36,10 +26,7 @@ exports.findUserById = (User) => (req, res, next) => {
 };
 
 exports.findUsers = (User) => (req, res, next) => {
-  const paginationOptions =
-    req.query.page && req.query.limit
-      ? { page: parseInt(req.query.page), limit: parseInt(req.query.limit) }
-      : undefined;
+  const paginationOptions = req.query.page && req.query.limit ? { page: parseInt(req.query.page), limit: parseInt(req.query.limit) } : undefined;
 
   if (paginationOptions) {
     findUserDocsPagination(paginationOptions, User)
@@ -74,8 +61,7 @@ exports.deleteUser = (User) => (req, res, next) => {
       deleteUserDocById(idUser, User)
         .then((userDeleted) => res.status(200).json(userDeleted))
         .catch((err) => next(err));
-    } else
-      throw "Id User is undefined. please send idUser `/api/user/:idUser` ";
+    } else throw "Id User is undefined. please send idUser `/api/user/:idUser` ";
   } catch (err) {
     next(err);
   }
@@ -88,7 +74,7 @@ exports.toggleFollowUser = (User) => async (req, res, next) => {
     const resp = await toggleFollowToUserDoc(userId, anotherUserId, User);
     res.status(200).json(resp);
   } catch (err) {
-    console.log(err);
+    next({ status: 500, error: err });
   }
 };
 const getUserFromRequest = (req) => ({

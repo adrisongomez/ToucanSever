@@ -1,8 +1,4 @@
-const {
-  connect,
-  closeDatabase,
-  dropDatabase,
-} = require("../../__mocks__/db.testHelper");
+const { connect, closeDatabase, dropDatabase } = require("../../__mocks__/db.testHelper");
 const User = require("./user.model");
 const { mockUserData } = require("../../__mocks__/utils.testHelper");
 
@@ -15,9 +11,7 @@ describe("User model test", () => {
 
   it("Should create a User", () => {
     const newUser = new User(mockUserData());
-    return User.create(newUser).then((resp) =>
-      expect(resp.firstName).toEqual(newUser.firstName)
-    );
+    return User.create(newUser).then((resp) => expect(resp.firstName).toEqual(newUser.firstName));
   });
 
   it("Should delete a User", () => {
@@ -32,7 +26,6 @@ describe("User model test", () => {
     const newUser = new User(mockUserData());
     await User.deleteMany();
     let saveUser = await User.create(newUser);
-    // console.log(saveUser.id);
     let findedUser = await User.findById(saveUser._id);
     expect(findedUser.id).toBe(saveUser.id);
   });
