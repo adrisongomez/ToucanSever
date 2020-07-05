@@ -7,3 +7,16 @@ This's app is just for learning purpose. The entire app is build in Javascript w
 
 This app arquitecture is based in MVC pattern, using Mongoose in Model Layer.
 
+# Specifications
+
+- __test__/pages
+
+Folder for test of Next pages.
+
+- client 
+
+Folder for Next resources like components, styles and assets.
+
+- src/*
+
+Folder it contains all express server resources.
