@@ -26,8 +26,6 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "googleapis": "^52.1.0",
@@ -42,9 +40,15 @@
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.0",
+    "@testing-library/react": "^10.4.4",
     "@types/jest": "^26.0.0",
+    "babel-jest": "^26.1.0",
+    "babel-plugin-styled-components": "^1.10.7",
     "concurrently": "^5.2.0",
     "dotenv": "^8.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "jest": "^26.0.1",
     "mongodb-memory-server": "^6.5.2"
   }
