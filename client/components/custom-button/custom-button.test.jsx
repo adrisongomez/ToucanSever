@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
-import { CustomButtonContainer } from "./custom-button.styles";
 import CustomButton from "./custom-button.component";
+import toJson from "enzyme-to-json";
 
 describe("CustomButton components", () => {
   it("should show childrens", () => {
@@ -24,5 +24,10 @@ describe("CustomButton components", () => {
   it("should have a prop color by default primary", () => {
     const wrapper = shallow(<CustomButton />);
     expect(wrapper.prop("color")).toBe("primary");
+  });
+
+  it("should set color when you pass a color in", () => {
+    const wrapper = shallow(<CustomButton color="dark" />);
+    expect(toJson(wrapper)).toMatchSnapshot();
   });
 });
