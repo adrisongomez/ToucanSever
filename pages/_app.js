@@ -1,10 +1,12 @@
-import App from "next";
+import App from "next/app";
 import { ThemeProvider } from "styled-components";
 import LightTheme from "../client/theme/light";
-import DarkTheme from "../client/theme/Dark";
+import DarkTheme from "../client/theme/dart";
+import { GlobalStyle } from "../client/global.style";
 
 export default class MyApp extends App {
   constructor() {
+    super();
     this.state = {
       theme: LightTheme,
     };
@@ -24,6 +26,7 @@ export default class MyApp extends App {
     return (
       <ThemeProvider theme={this.state.theme}>
         <Component {...pageProps} />
+        <GlobalStyle />
       </ThemeProvider>
     );
   }
