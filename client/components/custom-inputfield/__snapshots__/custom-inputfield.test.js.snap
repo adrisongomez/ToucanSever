@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CustomInputField component should match with snapshop 1`] = `
+<custom-inputfieldstyles__CustomInputFieldContainer>
+  <custom-inputfieldstyles__CustomInputText
+    name="name"
+    onChange={[Function]}
+    placeholder=""
+    type="text"
+  />
+</custom-inputfieldstyles__CustomInputFieldContainer>
+`;
