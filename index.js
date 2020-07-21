@@ -26,13 +26,7 @@ server.prepare().then(() => {
   app.listen(port, (error) => {
     if (error) throw error;
     console.log("Server running on port " + port);
-    const db = require("./src/models/db.connection");
-
-    app.listen(port, (error) => {
-      if (error) throw error;
-      console.log("Server running on port " + port);
-      const db = require("./src/models/db.connection");
-    });
+    require("./src/models/db.connection");
 
     app.use("/api/", RootRoute);
     app.get("*", (req, res) => {
