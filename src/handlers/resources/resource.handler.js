@@ -1,9 +1,4 @@
-const {
-  getResource,
-  addResource,
-  deleteResource,
-} = require("../../controller/resource/resource.controller");
-const { restart } = require("nodemon");
+const { getResource, addResource, deleteResource } = require("../../controller/resource/resource.controller");
 
 exports.getResourceFromAlbum = (User) => async (req, res, next) => {
   const idParent = req.params.idParent;

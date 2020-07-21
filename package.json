@@ -14,7 +14,8 @@
   "scripts": {
     "client-dev": "node bin/dev",
     "client": "next",
-    "start": "node index.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node index.js",
     "dev": "nodemon bin/dev",
     "sandbox": "nodemon sandbox_code.js",
     "test": "jest --runInBand --detectOpenHandles"
@@ -26,6 +27,7 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "googleapis": "^52.1.0",
