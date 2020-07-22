@@ -10,6 +10,7 @@ export const CustomButtonContainer = styled.button`
   border-radius: ${({ theme, rounded }) => (rounded ? theme.borderRadiusButton : "0px")};
   font-size: 14px;
   transition: opacity 200ms ease-in, box-shadow 200ms ease;
+  color: ${({ theme, txtColor }) => theme[txtColor]};
 
   &:hover {
     opacity: 0.9;

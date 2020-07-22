@@ -4,5 +4,6 @@ exports[`CustomButton components should set color when you pass a color in 1`] =
 <custom-buttonstyles__CustomButtonContainer
   color="dark"
   rounded={true}
+  txtColor="light"
 />
 `;
