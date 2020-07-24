@@ -28,8 +28,9 @@ export const ButtonsContainer = styled.div`
   margin-left: 2vw;
 `;
 
-export const LinkNav = styled.nav`
+export const LinkNav = styled.a`
   font-size: 14px;
+  text-decoration: none;
   font-weight: 600;
   color: ${({ theme }) => theme.dark2};
   padding: 5px 2vw;

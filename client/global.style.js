@@ -7,6 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     }
     
     *{
+        font-size: 14px;
         font-family: 'Montserrat', sans-serif;
         box-sizing:border-box;
         margin: 0;
