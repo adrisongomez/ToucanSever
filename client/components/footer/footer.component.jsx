@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { FooterContainer, FooterContent, Column, FooterOption, CopySign, Title } from "./footer.styles";
-export default function () {
+export default function() {
   return (
     <FooterContainer>
       <FooterContent>
@@ -38,7 +38,7 @@ export default function () {
           </Link>
         </Column>
       </FooterContent>
-      <CopySign>Adrison Gomez &copy; 2019</CopySign>
+      <CopySign>Adrison Gomez &copy; 2020</CopySign>
     </FooterContainer>
   );
 }

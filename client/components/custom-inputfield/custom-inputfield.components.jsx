@@ -1,9 +1,9 @@
 import React from "react";
 import { CustomInputFieldContainer, CustomInputLabel, CustomInputText } from "./custom-inputfield.styles";
 
-const CustomInputField = ({ ref, onChange, value, placeholder = "Write here...", type = "text", label, name }) => (
+const CustomInputField = ({ onChange, value, placeholder = "Write here...", type = "text", label, name, fowardRef }) => (
   <CustomInputFieldContainer>
-    <CustomInputText {...{ onChange, ref, value, placeholder, type, name }} />
+    <CustomInputText {...{ onChange, value, placeholder, type, name, ref: fowardRef }} />
   </CustomInputFieldContainer>
 );
 

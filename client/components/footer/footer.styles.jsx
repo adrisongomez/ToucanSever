@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Link from "next/link";
 
 export const FooterContainer = styled.div`
   display: flex;
@@ -9,7 +8,7 @@ export const FooterContainer = styled.div`
   place-content: center center;
   padding: 40px 5vw 20px;
   background-color: ${({ theme }) => theme.light2};
-  position: absolute;
+  position: relative;
   bottom: 0;
 `;
 
