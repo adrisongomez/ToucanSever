@@ -18,14 +18,14 @@ exports.loginUserCrendential = (Credential, User) => async (req, res, next) => {
   }
 };
 
-exports.refreshToken = (Credential) => async (req, res, next) => {
+exports.refreshToken = Credential => async (req, res, next) => {
   const jwt = req.cookies.wjt;
   if (!jwt) return Unathorized(res);
   const payload = isRefreshJWT(jwt);
   if (!payload) return Unathorized(res);
   const { username, user } = payload;
   if (!username) return Unathorized(res);
-  const credential = await Credential.findOne({ username }).catch((err) => undefined);
+  const credential = await Credential.findOne({ username }).catch(err => undefined);
   if (!credential) return Unathorized(res);
   return successfullyLogin({ user, username }, res);
 };
@@ -45,16 +45,16 @@ const successfullyLogout = (username, res) =>
     .status(200)
     .cookie("wtj", "", {
       httpOnly: true,
-      path: "api/auth/refresh",
+      path: "api/auth/refresh"
     })
     .json({
       status: "ok",
       message: "logout success",
       username,
-      accessToken: "",
+      accessToken: ""
     });
 
-const Unathorized = (res) => res.status(401).cookie("wtj", "").json({ status: "fail", message: "Unauthorized" });
+const Unathorized = res => res.status(401).cookie("wtj", "").json({ status: "fail", message: "Unauthorized" });
 
 const successfullyLogin = ({ user, username, status = "ok", message = "Refreshed tokken" }, res) => {
   const accessToken = accessJWTGenerator({ username, user });
@@ -62,8 +62,9 @@ const successfullyLogin = ({ user, username, status = "ok", message = "Refreshed
   return res
     .status(200)
     .cookie("wtj", refreshToken, {
+      secure: true,
       httpOnly: true,
-      path: "api/auth/refresh",
+      path: "api/auth/refresh"
     })
     .json({ status, message, accessToken });
 };

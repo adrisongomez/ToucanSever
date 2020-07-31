@@ -1,28 +1,28 @@
-const { findOne } = require("../../models/user/user.model");
-
 exports.createCredential = async (username, password, idUser, Credential) => {
   try {
     await Credential.create({ username, password, user: idUser });
     return { status: "new", message: "User created" };
   } catch (error) {
-    if (error.code === 11000)
+    console.log(error);
+    if (error.code === 11000) {
       throw {
         credential: {
-          unique: "Username or Email is not unique",
-        },
+          unique: "Username or Email is not unique"
+        }
       };
+    }
     if (error.errors.password) {
       throw {
         credential: {
-          password: error.errors.password.message,
-        },
+          password: error.errors.password.message
+        }
       };
     }
     if (error.errors.username) {
       throw {
         credential: {
-          password: error.errors.username.message,
-        },
+          password: error.errors.username.message
+        }
       };
     }
     throw error;
@@ -44,11 +44,10 @@ exports.loginEmail = async (email, password, Credential, User) => {
 
 const userNotExist = () => ({
   status: "fail",
-  message: "User not exists",
+  message: "User not exists"
 });
 
 const loginResponse = (resp, username) => {
-  if (resp)
-    return { status: "ok", message: "User logged", user: resp, username };
-  else throw { status: "fail", message: "username or password are not valid" };
+  if (resp) return { status: "ok", message: "User logged", user: resp, username };
+  throw { status: "fail", message: "username or password are not valid" };
 };
