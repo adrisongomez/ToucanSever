@@ -1,4 +1,5 @@
 import App from "next/app";
+import { useState } from "react";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { createWrapper } from "next-redux-wrapper";
@@ -8,35 +9,29 @@ import DarkTheme from "../client/theme/dart";
 import { GlobalStyle } from "../client/global.style";
 import store from "../client/redux/store";
 
-class MyApp extends App {
-  constructor() {
-    super();
-    this.state = {
-      theme: LightTheme
-    };
-  }
+const MyApp = ({ Component, pageProps }) => {
+  const [theme, setTheme] = useState(LightTheme);
 
-  setTheme = options => {
+  const changeTheme = (options) => {
     switch (options) {
       case "light":
-        return this.setTheme({ theme: LightTheme });
+        return setTheme({ theme: LightTheme });
       case "dark":
-        return this.setTheme({ theme: DarkTheme });
+        return setTheme({ theme: DarkTheme });
+      default:
+        return setTheme({LightTheme});
     }
   };
 
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <Provider store={store}>
-        <ThemeProvider theme={this.state.theme}>
-          <Component {...pageProps} />
-          <GlobalStyle />
-        </ThemeProvider>
-      </Provider>
-    );
-  }
-}
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+        <GlobalStyle />
+      </ThemeProvider>
+    </Provider>
+  );
+};
 
 const wrapper = createWrapper(() => store);
 

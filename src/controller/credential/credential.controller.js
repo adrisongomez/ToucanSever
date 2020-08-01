@@ -7,31 +7,32 @@ exports.createCredential = async (username, password, idUser, Credential) => {
     if (error.code === 11000) {
       throw {
         credential: {
-          unique: "Username or Email is not unique"
-        }
+          unique: "Username or Email is not unique",
+        },
       };
     }
     if (error.errors.password) {
       throw {
         credential: {
-          password: error.errors.password.message
-        }
+          password: error.errors.password.message,
+        },
       };
     }
     if (error.errors.username) {
       throw {
         credential: {
-          password: error.errors.username.message
-        }
+          password: error.errors.username.message,
+        },
       };
     }
     throw error;
   }
 };
 
-exports.loginCredential = async (username, password, Credential) => {
+exports.loginCredential = async (username, password, Credential, User) => {
   const resp = await Credential.isValid({ username, password });
-  return loginResponse(resp, username);
+  const user = await User.findById(resp).then();
+  return loginResponse(user, username);
 };
 
 exports.loginEmail = async (email, password, Credential, User) => {
@@ -44,7 +45,7 @@ exports.loginEmail = async (email, password, Credential, User) => {
 
 const userNotExist = () => ({
   status: "fail",
-  message: "User not exists"
+  message: "User not exists",
 });
 
 const loginResponse = (resp, username) => {

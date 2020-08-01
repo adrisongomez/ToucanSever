@@ -1,28 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
-import { Container, FormContainer, ButtonContainer, SignInTitle } from "../signup-form/signup-form.styles";
+import { FormContainer } from "./signin-form.styles";
+import { Container, ButtonContainer, SignInTitle } from "../signup-form/signup-form.styles";
 import CustomButton from "../custom-button/custom-button.component";
 import CustomField from "../custom-inputfield/custom-inputfield.components";
-import AuthService from "../../services/user.service";
-
-const service = new AuthService();
-
-const signInHandler = data => {
-  const { username } = data;
-  service.login(data);
-  console.log(username);
-  return false;
-};
+import CustomCard from "../card/card.component.jsx";
+import { login } from "../../redux/user/user.action";
 
 export default function SignIn() {
+  const [error, setError] = useState({ ok: false, msj:"" });
+  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   return (
-    <Container onSubmit={handleSubmit(signInHandler)}>
-      <SignInTitle> Sign In Form</SignInTitle>
+    <Container onSubmit={handleSubmit(signInHandler(dispatch, setError))}>
+      <SignInTitle> Sign In</SignInTitle>
       <FormContainer>
-        <CustomField fowardRef={register} placeholder="Username or Email..." name="username" />
-        <CustomField fowardRef={register} placeholder="Password..." type="password" name="password" />
+        <CustomCard width="600px" color="primary" warning={error.ok} msgWarning={error.msj}>
+          <CustomField fowardRef={register} placeholder="Username or Email..." name="username" />
+          <CustomField fowardRef={register} placeholder="Password..." type="password" name="password" />
+        </CustomCard>
       </FormContainer>
       <ButtonContainer>
         <CustomButton type="submit" rounded={false}>
@@ -35,3 +33,7 @@ export default function SignIn() {
     </Container>
   );
 }
+
+const signInHandler = (dispatch, setError) => async data => {
+  dispatch(login(data, setError));
+};

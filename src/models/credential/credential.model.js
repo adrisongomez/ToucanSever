@@ -37,7 +37,7 @@ UserCredential.static("isValid", async function ({ username, password }) {
   if (!userBd) return false;
   const samePassword = await compare(password, userBd.password);
   if (!samePassword) return false;
-  return userBd._id;
+  return userBd.user;
 });
 
 module.exports = model("credential", UserCredential);
