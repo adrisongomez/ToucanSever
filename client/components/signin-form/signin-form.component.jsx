@@ -7,7 +7,7 @@ import { Container, ButtonContainer, SignInTitle } from "../signup-form/signup-f
 import CustomButton from "../custom-button/custom-button.component";
 import CustomField from "../custom-inputfield/custom-inputfield.components";
 import CustomCard from "../card/card.component.jsx";
-import { login } from "../../redux/user/user.action";
+import { login, toggleSignIn } from "../../redux/user/user.action";
 
 export default function SignIn() {
   const [error, setError] = useState({ ok: false, msj:"" });
@@ -24,10 +24,10 @@ export default function SignIn() {
       </FormContainer>
       <ButtonContainer>
         <CustomButton type="submit" rounded={false}>
-          Sign In
+          SIGN IN
         </CustomButton>
-        <CustomButton type="button" color="dark2" rounded={false}>
-          Sign Up
+           <CustomButton onClick={()=>dispatch(toggleSignIn())} type="button" color="dark2" rounded={false}>
+          SIGN UP
         </CustomButton>
       </ButtonContainer>
     </Container>

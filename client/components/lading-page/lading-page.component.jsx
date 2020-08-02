@@ -1,7 +1,6 @@
 import React from "react";
 import { LandingContainer, Title, Subtitle } from "./lading-page.styles";
-import SignIn from '../signin-form/signin-form.component';
-// import SignUpForm from "../signup-form/signup-form.components";
+import OverViewForm from '../sign-overview/sign-overview.component';
 
 export default function LandingPage() {
   return (
@@ -10,9 +9,7 @@ export default function LandingPage() {
         <Subtitle>Share yours</Subtitle>
         <Title>Expirence</Title>
       </div>
-      <SignIn />
+      <OverViewForm />
     </LandingContainer>
   );
 }
-
-//      <SignUpForm />
