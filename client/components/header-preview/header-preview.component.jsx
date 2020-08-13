@@ -1,8 +1,10 @@
 import React from "react";
-import {} from "./header.styles";
 
-const Header = ({ public }) => {
-  return;
+import HeaderPublic from "../header-public/header-public.component";
+
+const HeaderPreview = ({ isPublic }) => {
+  const header = isPublic ? <HeaderPublic /> : <div />;
+  return header;
 };
 
-export default Header;
+export default HeaderPreview;

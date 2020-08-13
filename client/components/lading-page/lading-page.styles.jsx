@@ -25,4 +25,3 @@ export const Title = styled.p`
   color: ${({ theme }) => theme.secondary};
 `;
 
-

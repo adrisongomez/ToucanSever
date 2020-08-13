@@ -6,6 +6,7 @@ export default {
   dark: "#000000",
   dark2: "#707070",
   dark3: "#5e5e5e",
+  warning: "tomato",
   borderRadiusContainer: "15px",
   borderRadiusButton: "35px",
 };

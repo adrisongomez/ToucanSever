@@ -1,17 +1,17 @@
 import React from "react";
+import { useRouter } from "next/router";
 import CustomButton from "../custom-button/custom-button.component";
 import { HeaderContainer, Logo, Nav, LinkNav, Options, ButtonsContainer, Or } from "./header-public.styles";
 import { ReactComponent as GoogleSVG } from "../../assets/google_logo.svg";
 
-const googleHandler = event => {
+const googleHandler = (router, href) => event => {
   event.preventDefault();
-  const windows = window.open("/api/auth/provider/google/", "name", "height=600,width=450");
-  setInterval(() => {
-    console.log(windows.document.body.innerText.toString());
-  }, 2500);
+  router.push(href);
 };
 
 export default function HeaderPublic() {
+  const router = useRouter();
+
   return (
     <HeaderContainer>
       <Logo>TOUCAN</Logo>
@@ -23,10 +23,8 @@ export default function HeaderPublic() {
         <ButtonsContainer>
           <CustomButton style={{ color: "white", padding: "5px 20px" }}>SIGN IN</CustomButton>
           <Or>Or</Or>
-          <CustomButton color="light" style={googleButtomStyle}>
-            <LinkNav href="/api/auth/provider/google/">
-              <GoogleSVG height="20px" />{" "}
-            </LinkNav>
+          <CustomButton onClick={googleHandler(router, "/api/auth/provider/google")} color="light" style={googleButtomStyle}>
+            <GoogleSVG height="20px" />
           </CustomButton>
         </ButtonsContainer>
       </Nav>

@@ -1,20 +1,21 @@
 import React from "react";
 
-const SingUpPage = ({ data }) => {
-  console.log(data);
+import MainContainer from "../../client/components/main-container/main-container.components";
+import SignUpPageForm from "../../client/components/signup-page-form/signup-page-form.component";
+
+const SignUpPage = ({ data }) => {
   return (
-    <div>
-       <p>It&apos;s working </p>
-          <img src={data.picture} alt=""/>
-    </div>
+    <MainContainer>
+      <SignUpPageForm {...{ data }} />
+    </MainContainer>
   );
 };
 
-SingUpPage.getInitialProps = async ctx => {
+SignUpPage.getInitialProps = async ctx => {
   const { req } = ctx;
-  if (req.query.data === undefined) return;
+  if (req.query.data === undefined) return { data: null };
   const data = JSON.parse(req.query.data);
   return { data };
 };
 
-export default SingUpPage;
+export default SignUpPage;
