@@ -18,7 +18,8 @@ exports.googleCallbackHandler = (Client, OauthService) => async (req, res, next)
   if (!code) return Unauthorized(next);
   const data = await getUserDataFromGoogle(code, Client(), OauthService());
   if (!data) return SomethingHappen(next);
-  return res.status(200).json(data);
+  return res.redirect(`/signup/?data=${JSON.stringify(data)}`);
+//  return res.status(200).json(data);
 };
 
 const Unauthorized = (next) =>
