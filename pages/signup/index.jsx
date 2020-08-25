@@ -1,20 +1,16 @@
 import React from "react";
+import Head from "next/head";
 
 import MainContainer from "../../client/components/main-container/main-container.components";
 import SignUpPageForm from "../../client/components/signup-page-form/signup-page-form.component";
 
-const SignUpPage = ({ data }) => (
+const SignUpPage = () => (
   <MainContainer>
-    <SignUpPageForm {...{ data }} />
+    <Head>
+      <title>Toucan - Sign Up</title>
+    </Head>
+    <SignUpPageForm />
   </MainContainer>
 );
-
-SignUpPage.getInitialProps = async (ctx) => {
-  const { req } = ctx;
-  if (req.query === undefined) return { data: null };
-  if ("data" in req.query) return { data: null };
-  const data = JSON.parse("data" in req.query);
-  return { data };
-};
 
 export default SignUpPage;
