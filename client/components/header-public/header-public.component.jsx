@@ -4,7 +4,7 @@ import CustomButton from "../custom-button/custom-button.component";
 import { HeaderContainer, Logo, Nav, LinkNav, Options, ButtonsContainer, Or } from "./header-public.styles";
 import { ReactComponent as GoogleSVG } from "../../assets/google_logo.svg";
 
-const googleHandler = (router, href) => event => {
+const googleHandler = (router, href) => (event) => {
   event.preventDefault();
   router.push(href);
 };
@@ -14,7 +14,7 @@ export default function HeaderPublic() {
 
   return (
     <HeaderContainer>
-      <Logo>TOUCAN</Logo>
+       <Logo onClick={googleHandler(router, '/')}>TOUCAN</Logo>
       <Nav>
         <Options>
           <LinkNav href="/about/business">For Business</LinkNav>
@@ -33,5 +33,5 @@ export default function HeaderPublic() {
 }
 
 const googleButtomStyle = {
-  padding: "5px 20px"
+  padding: "5px 20px",
 };

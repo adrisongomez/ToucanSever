@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const CustomInputFieldContainer = styled.div`
+  width: 100%;
   background-color: ${({ theme }) => theme.light};
   border-radius: 50px;
   padding: 10px 20px;
