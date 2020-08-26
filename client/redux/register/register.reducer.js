@@ -8,7 +8,6 @@ const InitialState = {
    email: "",
    city: "",
    zipCode: "",
-   address: "",
    username: "",
    password: "",
    profileImg: "",
@@ -19,7 +18,7 @@ export const registerReducer = (state = InitialState, action) => {
    case RegisterActionsType.INITIAL_REGISTER:
       return {
          ...state,
-         firstName: action.payload.firstname,
+         firstName: action.payload.firstName,
          lastName: action.payload.lastName,
          email: action.payload.email,
          city: action.payload.city,

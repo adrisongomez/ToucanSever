@@ -1,0 +1,512 @@
+
+{
+  "header": {
+    "reportVersion": 2,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200826.151341.82861.0.001.json",
+    "dumpEventTime": "2020-08-26T15:13:41Z",
+    "dumpEventTimeStamp": "1598469221695",
+    "processId": 82861,
+    "threadId": null,
+    "cwd": "/home/ad0197/projects/ToucanSever",
+    "commandLine": [
+      "/home/ad0197/.nvm/versions/node/v12.16.2/bin/node",
+      "index.js"
+    ],
+    "nodejsVersion": "v12.16.2",
+    "glibcVersionRuntime": "2.31",
+    "glibcVersionCompiler": "2.17",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "linux",
+    "componentVersions": {
+      "node": "12.16.2",
+      "v8": "7.8.279.23-node.34",
+      "uv": "1.34.2",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "2.0.4",
+      "http_parser": "2.9.3",
+      "openssl": "1.1.1e",
+      "cldr": "36.0",
+      "icu": "65.1",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "lts": "Erbium",
+      "headersUrl": "https://nodejs.org/download/release/v12.16.2/node-v12.16.2-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.16.2/node-v12.16.2.tar.gz"
+    },
+    "osName": "Linux",
+    "osRelease": "5.4.0-42-generic",
+    "osVersion": "#46-Ubuntu SMP Fri Jul 10 00:24:02 UTC 2020",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2488,
+        "user": 102654900,
+        "nice": 77600,
+        "sys": 31428000,
+        "idle": 369603900,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2800,
+        "user": 107046200,
+        "nice": 38300,
+        "sys": 35189100,
+        "idle": 26200,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2800,
+        "user": 106537400,
+        "nice": 54100,
+        "sys": 38551900,
+        "idle": 14400,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2658,
+        "user": 98600100,
+        "nice": 66600,
+        "sys": 25351700,
+        "idle": 24300,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2683,
+        "user": 101278000,
+        "nice": 93900,
+        "sys": 30207800,
+        "idle": 3200,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2802,
+        "user": 94244600,
+        "nice": 34800,
+        "sys": 24898600,
+        "idle": 20800,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2800,
+        "user": 97616400,
+        "nice": 30100,
+        "sys": 26403000,
+        "idle": 18500,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz",
+        "speed": 2394,
+        "user": 102963300,
+        "nice": 58400,
+        "sys": 33632200,
+        "idle": 27700,
+        "irq": 0
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      }
+    ],
+    "host": "ad0197-Lenovo-ideapad-330S-15IKB"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x0000000000b40285",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::string const&, v8::Local<v8::String>) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000a033ef",
+      "symbol": "node::OnFatalError(char const*, char const*) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b76ffe",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b77379",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000d23ad5",
+      "symbol": " [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000d24166",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000d309e5",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000d31895",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000d3434c",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFail(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cfaf1b",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType, v8::internal::AllocationOrigin) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x000000000103d85e",
+      "symbol": "v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    },
+    {
+      "pc": "0x00000000013c03d9",
+      "symbol": " [/home/ad0197/.nvm/versions/node/v12.16.2/bin/node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2156675072,
+    "totalCommittedMemory": 2152512664,
+    "usedMemory": 2144874888,
+    "availableMemory": 48838064,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 33088,
+        "capacity": 32808,
+        "used": 32808,
+        "available": 0
+      },
+      "new_space": {
+        "memorySize": 7864320,
+        "committedMemory": 4844096,
+        "capacity": 3927960,
+        "used": 1070560,
+        "available": 2857400
+      },
+      "old_space": {
+        "memorySize": 2077892608,
+        "committedMemory": 2077103576,
+        "capacity": 2075218472,
+        "used": 2074305992,
+        "available": 912480
+      },
+      "code_space": {
+        "memorySize": 1478656,
+        "committedMemory": 1354976,
+        "capacity": 1273408,
+        "used": 1273408,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 3936256,
+        "committedMemory": 3935840,
+        "capacity": 3149760,
+        "used": 3149760,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 64618496,
+        "committedMemory": 64618496,
+        "capacity": 64497816,
+        "used": 64497816,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 622592,
+        "committedMemory": 622592,
+        "capacity": 544544,
+        "used": 544544,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 3927960,
+        "used": 0,
+        "available": 3927960
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 101.68,
+    "kernelCpuSeconds": 1.98988,
+    "cpuConsumptionPercent": 185.125,
+    "maxRss": 2269077504,
+    "pageFaults": {
+      "IORequired": 23,
+      "IONotRequired": 712727
+    },
+    "fsActivity": {
+      "reads": 107424,
+      "writes": 26072
+    }
+  },
+  "uvthreadResourceUsage": {
+    "userCpuSeconds": 44.3558,
+    "kernelCpuSeconds": 0.956254,
+    "cpuConsumptionPercent": 80.9144,
+    "fsActivity": {
+      "reads": 97752,
+      "writes": 0
+    }
+  },
+  "libuv": [
+  ],
+  "workers": [
+  ],
+  "environmentVariables": {
+    "USER": "ad0197",
+    "LC_TIME": "es_DO.UTF-8",
+    "npm_package_devDependencies_jest": "^26.0.1",
+    "npm_package_devDependencies__testing_library_jest_dom": "^5.11.0",
+    "npm_config_version_commit_hooks": "true",
+    "npm_config_user_agent": "yarn/1.22.4 npm/? node/v12.16.2 linux x64",
+    "npm_package_jest_testEnvironment": "node",
+    "npm_config_bin_links": "true",
+    "SSH_AGENT_PID": "1477",
+    "XDG_SESSION_TYPE": "x11",
+    "npm_node_execpath": "/home/ad0197/.nvm/versions/node/v12.16.2/bin/node",
+    "npm_package_devDependencies_file_loader": "^6.0.0",
+    "npm_config_init_version": "1.0.0",
+    "SHLVL": "1",
+    "npm_package_dependencies_react_hook_form": "^6.0.8",
+    "HOME": "/home/ad0197",
+    "QT4_IM_MODULE": "ibus",
+    "OLDPWD": "/home/ad0197/projects/ToucanSever",
+    "LESS": "-R",
+    "DESKTOP_SESSION": "ubuntu",
+    "NVM_BIN": "/home/ad0197/.nvm/versions/node/v12.16.2/bin",
+    "npm_package_scripts_client_dev": "nodemon index.js",
+    "ZSH": "/home/ad0197/.oh-my-zsh",
+    "LSCOLORS": "Gxfxcxdxbxegedabagacad",
+    "NVM_INC": "/home/ad0197/.nvm/versions/node/v12.16.2/include/node",
+    "npm_package_devDependencies_enzyme_adapter_react_16": "^1.15.2",
+    "npm_package_engines_node": "12.16.2",
+    "npm_config_init_license": "MIT",
+    "GTK_MODULES": "gail:atk-bridge",
+    "GNOME_SHELL_SESSION_MODE": "ubuntu",
+    "PAGER": "less",
+    "YARN_WRAP_OUTPUT": "false",
+    "npm_config_version_tag_prefix": "v",
+    "MANAGERPID": "1232",
+    "LC_MONETARY": "es_DO.UTF-8",
+    "npm_package_dependencies_redux_thunk": "^2.3.0",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+    "P9K_TTY": "old",
+    "npm_package_devDependencies_eslint_plugin_react_hooks": "^4.0.8",
+    "npm_package_dependencies_compression": "^1.7.4",
+    "COLORTERM": "truecolor",
+    "npm_package_dependencies_react_transition_group": "^4.4.1",
+    "npm_package_description": "Toucan Services App server",
+    "NVM_DIR": "/home/ad0197/.nvm",
+    "npm_package_readmeFilename": "README.md",
+    "MANDATORY_PATH": "/usr/share/gconf/ubuntu.mandatory.path",
+    "IM_CONFIG_PHASE": "1",
+    "npm_package_devDependencies_babel_jest": "^26.1.0",
+    "npm_package_scripts_dev": "nodemon index.js",
+    "GTK_IM_MODULE": "ibus",
+    "LOGNAME": "ad0197",
+    "npm_package_devDependencies_eslint_plugin_import": "^2.22.0",
+    "npm_package_dependencies_reselect": "^4.0.0",
+    "npm_package_dependencies_bcrypt": "^5.0.0",
+    "_": "/usr/bin/yarn",
+    "JOURNAL_STREAM": "9:47133",
+    "UPDATE_ZSH_DAYS": "13",
+    "npm_package_devDependencies__types_jest": "^26.0.0",
+    "npm_package_dependencies_redux_devtools_extension": "^2.13.8",
+    "npm_package_dependencies_express": "^4.17.1",
+    "DEFAULTS_PATH": "/usr/share/gconf/ubuntu.default.path",
+    "XDG_SESSION_CLASS": "user",
+    "npm_package_scripts_sandbox": "nodemon sandbox_code.js",
+    "npm_config_registry": "https://registry.yarnpkg.com",
+    "USERNAME": "ad0197",
+    "TERM": "xterm-256color",
+    "npm_package_dependencies_redux_logger": "^3.0.6",
+    "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated",
+    "npm_package_scripts_start": "cross-env NODE_ENV=production node index.js",
+    "npm_config_ignore_scripts": "",
+    "WINDOWPATH": "2",
+    "npm_package_dependencies_node_mocks_http": "^1.8.1",
+    "npm_package_dependencies_next_images": "^1.4.0",
+    "npm_package_dependencies_axios": "^0.19.2",
+    "PATH": "/tmp/yarn--1598469083434-0.8168890953832422:/home/ad0197/projects/ToucanSever/node_modules/.bin:/home/ad0197/.config/yarn/link/node_modules/.bin:/home/ad0197/.yarn/bin:/home/ad0197/.nvm/versions/node/v12.16.2/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/ad0197/.nvm/versions/node/v12.16.2/lib/node_modules/npm/bin/node-gyp-bin:/home/ad0197/.nvm/versions/node/v12.16.2/bin/node_modules/npm/bin/node-gyp-bin:/home/ad0197/.nvm/versions/node/v12.16.2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "NODE": "/home/ad0197/.nvm/versions/node/v12.16.2/bin/node",
+    "SESSION_MANAGER": "local/ad0197-Lenovo-ideapad-330S-15IKB:@/tmp/.ICE-unix/1631,unix/ad0197-Lenovo-ideapad-330S-15IKB:/tmp/.ICE-unix/1631",
+    "INVOCATION_ID": "1ce6bc33c07b479d94fb6a614f040b3f",
+    "npm_package_dependencies_cross_env": "^7.0.2",
+    "npm_package_repository_type": "git",
+    "npm_package_name": "toucan-server",
+    "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/9d7c9f72_0f33_49a3_a87f_f4723574dc8e",
+    "XDG_MENU_PREFIX": "gnome-",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "LC_ADDRESS": "es_DO.UTF-8",
+    "npm_package_devDependencies_eslint_plugin_jsx_a11y": "^6.3.1",
+    "npm_package_dependencies_react_redux": "^7.2.1",
+    "npm_package_scripts_client": "next",
+    "DISPLAY": ":0",
+    "npm_package_devDependencies_eslint_config_airbnb": "^18.2.0",
+    "XDG_CURRENT_DESKTOP": "ubuntu:GNOME",
+    "LANG": "en_US.UTF-8",
+    "LC_TELEPHONE": "es_DO.UTF-8",
+    "npm_package_devDependencies_eslint": "^7.5.0",
+    "npm_package_dependencies_redux": "^4.0.5",
+    "npm_package_dependencies_react_dom": "^16.13.1",
+    "XDG_SESSION_DESKTOP": "ubuntu",
+    "GNOME_TERMINAL_SERVICE": ":1.403",
+    "XMODIFIERS": "@im=ibus",
+    "XAUTHORITY": "/run/user/1000/gdm/Xauthority",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:",
+    "npm_lifecycle_script": "nodemon index.js",
+    "npm_package_devDependencies_dotenv": "^8.2.0",
+    "npm_package_main": "index.js",
+    "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh",
+    "npm_package_devDependencies_concurrently": "^5.2.0",
+    "npm_package_dependencies_next_redux_wrapper": "^6.0.2",
+    "npm_package_dependencies_body_parser": "^1.19.0",
+    "npm_package_scripts_test": "jest --runInBand --detectOpenHandles",
+    "npm_config_version_git_message": "v%s",
+    "SHELL": "/usr/bin/zsh",
+    "LC_NAME": "es_DO.UTF-8",
+    "npm_lifecycle_event": "client-dev",
+    "npm_package_devDependencies__testing_library_react": "^10.4.4",
+    "npm_package_dependencies_mongoose_error_handler": "^1.1.0",
+    "npm_package_repository_url": "https://github.com/Ad0197/ToucanSever",
+    "npm_package_version": "1.0.0",
+    "QT_ACCESSIBILITY": "1",
+    "GDMSESSION": "ubuntu",
+    "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"client-dev\"],\"original\":[\"run\",\"client-dev\"]}",
+    "npm_package_dependencies_cors": "^2.8.5",
+    "npm_package_scripts_build": "next build",
+    "npm_package_devDependencies_babel_plugin_inline_react_svg": "^1.1.1",
+    "LC_MEASUREMENT": "es_DO.UTF-8",
+    "npm_package_devDependencies_mongodb_memory_server": "^6.5.2",
+    "npm_config_version_git_tag": "true",
+    "npm_config_version_git_sign": "",
+    "LC_IDENTIFICATION": "es_DO.UTF-8",
+    "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1",
+    "P9K_SSH": "0",
+    "npm_package_devDependencies_eslint_plugin_react": "^7.20.5",
+    "npm_package_devDependencies_babel_plugin_styled_components": "^1.10.7",
+    "npm_package_dependencies_mongoose": "^5.9.11",
+    "npm_package_dependencies_googleapis": "^52.1.0",
+    "npm_config_strict_ssl": "true",
+    "QT_IM_MODULE": "ibus",
+    "npm_package_dependencies_faker": "^4.1.0",
+    "PWD": "/home/ad0197/projects/ToucanSever",
+    "npm_execpath": "/usr/share/yarn/bin/yarn.js",
+    "npm_package_devDependencies_enzyme": "^3.11.0",
+    "XDG_DATA_DIRS": "/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop",
+    "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu:/etc/xdg",
+    "CLUTTER_IM_MODULE": "ibus",
+    "NVM_CD_FLAGS": "-q",
+    "npm_package_devDependencies_enzyme_to_json": "^3.5.0",
+    "npm_package_author_name": "Adrison Junior Gomez Gomez",
+    "LC_NUMERIC": "es_DO.UTF-8",
+    "npm_package_dependencies_styled_components": "^5.1.1",
+    "npm_package_dependencies_cookie_parser": "^1.4.5",
+    "npm_config_save_prefix": "^",
+    "npm_config_ignore_optional": "",
+    "LC_PAPER": "es_DO.UTF-8",
+    "npm_package_devDependencies_jest_styled_components": "^7.0.2",
+    "npm_package_dependencies_next": "^9.4.4",
+    "npm_package_dependencies_jsonwebtoken": "^8.5.1",
+    "VTE_VERSION": "6003",
+    "INIT_CWD": "/home/ad0197/projects/ToucanSever",
+    "npm_package_dependencies_react": "^16.13.1",
+    "npm_package_dependencies_morgan": "^1.10.0",
+    "MONGODB_URI": "mongodb://localhost:27017/toucandb",
+    "SECRET_ACCESS": "TH&p\\~H-Es8B%*p6t-(%tCVg<JfSu-z(.B{[Js;MS\"#J[p,uXAtC8yPV'j:/`BJs",
+    "SECRET_REFRESH": "cxW]]@QhtQy/Eybt_t^:F3\"577}UV;s's#<U~6f'%}BC.rEcqU@-;Hv(+`A6[6/&",
+    "SALT": "10",
+    "GOOGLE_API": "AIzaSyCmc395YkzZ-e8n5fzULGS5cvvTm-O7Bj0",
+    "GOOGLE_CLIENT_ID": "198947563469-p63bjq58eincsn28703hqogrcvijm1il.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_SECRET": "lkRgL-R5Mbd8p3nVW0lZGZOG",
+    "PORT": "8000",
+    "DOMAIN": "http://localhost:8000",
+    "__NEXT_PROCESSED_ENV": "true"
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": 0,
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": 67108864,
+      "hard": 67108864
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 1048576,
+      "hard": 1048576
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": "unlimited"
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 31257,
+      "hard": 31257
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "linux-vdso.so.1",
+    "/lib/x86_64-linux-gnu/libdl.so.2",
+    "/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "/lib/x86_64-linux-gnu/libm.so.6",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/lib/x86_64-linux-gnu/libpthread.so.0",
+    "/lib/x86_64-linux-gnu/libc.so.6",
+    "/lib64/ld-linux-x86-64.so.2",
+    "/home/ad0197/projects/ToucanSever/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node",
+    "/lib/x86_64-linux-gnu/libnss_files.so.2",
+    "/lib/x86_64-linux-gnu/libnss_dns.so.2",
+    "/lib/x86_64-linux-gnu/libresolv.so.2"
+  ]
+}

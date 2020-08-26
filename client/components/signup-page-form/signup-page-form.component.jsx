@@ -1,9 +1,12 @@
-import React, { useReducer } from "react";
+import React, {useState} from "react";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
+import { initialRegisterRegister } from "../../redux/register/register.action";
 import CustomInput from "../custom-inputfield/custom-inputfield.components";
 import CustomButton from "../custom-button/custom-button.component";
+import SignUpPersonalInfo from './signup-parts/part-1';
 
 import { SignUpContainer, Row, ButtonRow, Title } from "./signup-page-form.styles";
 
@@ -13,44 +16,26 @@ const standarizeObject = ({ given_name, family_name, picture, ...otherAttr }) =>
   ...otherAttr,
 });
 
+const getRegisterPart = (part) => {
+   switch(part){
+      case 1:
+         return SignUpPageForm;
+
+      default:
+         return SignUpPageForm;
+   }
+}
+
 const SignUpPageForm = () => {
+  const [position, setPostion] = useState(1);
   const router = useRouter();
   let data;
-  if(router.query.data) data = standarizeObject(JSON.parse(router.query.data));
+  if (router.query.data) data = standarizeObject(JSON.parse(router.query.data));
   else data = {};
-  const { register, handleSubmit } = useForm({
-    defaultValues: data,
-  });
+  const CurrentPart = getRegisterPart(position);
   return (
     <SignUpContainer>
-      <Row>
-        <Title>Register</Title>
-      </Row>
-      <Row>
-         <CustomInput name="firstName" placeholder="First Name..." fowardRef={register} disabled={(data.firstName !== undefined) ? true : false} />
-        <CustomInput name="lastName" placeholder="Last Name..." fowardRef={register}  disabled={(data.lastName !== undefined) ? true : false}/>
-      </Row>
-      <Row>
-        <CustomInput name="email" placeholder="Email..." fowardRef={register} disabled={(data.email !== undefined) ? true : false}/>
-      </Row>
-      <Row>
-        <CustomInput name="country" placeholder="Country..." fowardRef={register} disabled={(data.country !== undefined) ? true : false}/>
-      </Row>
-      <Row>
-        <CustomInput name="state" placeholder="State Province or City..." fowardRef={register} />
-        <CustomInput name="zipCode" placeholder="Zip Code..." fowardRef={register} />
-      </Row>
-      <ButtonRow>
-        <CustomButton>Submit Register</CustomButton>
-        <CustomButton
-          style={{
-            margin: "0 0 0 10px",
-          }}
-          color="warning"
-        >
-          Cancel
-        </CustomButton>
-      </ButtonRow>
+      <CurrentPart />    
     </SignUpContainer>
   );
 };

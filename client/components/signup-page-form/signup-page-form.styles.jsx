@@ -18,11 +18,6 @@ export const Row = styled.div`
    ${cssRow}
 `;
 
-export const ButtonRow = styled.div`
-   ${cssRow}
-   padding: 10px;
-`;
-
 export const Title = styled.div`
    font-size: 25pt;
    font-weight: bold;
