@@ -28,7 +28,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "faker": "^4.1.0",
     "googleapis": "^52.1.0",
     "jsonwebtoken": "^8.5.1",
